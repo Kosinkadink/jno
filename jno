@@ -73,6 +73,8 @@ def parse_jno():
 				jno_dict["BOARD"] = line.split('==')[1]
 			elif line.startswith("BAUDRATE"):
 				jno_dict["BAUDRATE"] = line.split('==')[1]
+			elif line.startswith("PORT"):
+				jno_dict["PORT"] = line.split('==')[1]
 			elif line.startswith("SKETCH_DIR"):
 				jno_dict["SKETCH_DIR"] = line.split('==')[1]
 	# verify necessities are filled out
@@ -105,10 +107,11 @@ def return_code_qualifier(return_code):
 
 # Open serial communication with arduino
 def start_serialcomm(jno_dict):
-	pass
+	print 'TO-DO: make serialcomm'
 
 
-def main(argv,serialComm=False):
+def main(argv):
+	serialComm = False
 	try:
 		jno_dict = parse_jno()
 	except IOError:
@@ -117,12 +120,12 @@ def main(argv,serialComm=False):
 	if DEBUG: print jno_dict
 	arg_list = [jno_dict["EXEC_SCRIPT"]]
 	try:
-		opts,args = getopt.getopt(argv, 'ivup:b:',['init','verify=','upload=','port=','board=','baud='])
+		opts,args = getopt.getopt(argv, 'ivup:b:',['serial','init','verify','upload','build','port=','board=','baud='])
 	except getopt.GetoptError:
 		print 'invalid arguments'
 		quit()
 	for opt, arg in opts:
-		if opt in ("-v","--verify"):
+		if opt in ("-v","--verify","--build"):
 			arg_list.append("--verify")
 			arg_list.append(jno_dict["ARDUINO_SKETCH"])
 		if opt in ("-u","--upload"):
@@ -145,6 +148,8 @@ def main(argv,serialComm=False):
 		if opt in ("-i","--init"):
 			init_jno()
 			quit()
+		if opt in ("--serial"):
+			serialComm = True
 
 	# perform serialComm, if requested
 	if serialComm:
@@ -170,13 +175,20 @@ def main(argv,serialComm=False):
 			move_libs(jno_dict)
 		
 		os.system('cd ~')
-		returned = subprocess.check_call(arg_list)
+		try:
+			returned = subprocess.check_call(arg_list)
+		except subprocess.CalledProcessError,e:
+			returned = e.returncode
 		print 'ALL ACTIONS COMPLETED: {}'.format(return_code_qualifier(returned))
 
 
 if __name__ == '__main__':
 	args = sys.argv[1:]
-	if "serial" in args:
-		main(args[1:],serialComm=True)
-	else:
-		main(sys.argv[1:])
+	if "build" in args:
+		args[args.index("build")] = "--build"
+	elif "serial" in args:
+		args[args.index("serial")] = "--serial"
+	elif "upload" in args:
+		args[args.index("upload")] = "--upload"
+	
+	main(args)
