@@ -1,0 +1,152 @@
+#!/usr/bin/python2
+import sys, os, getopt, subprocess, shutil
+
+# directory from which this script is ran
+__location__ = os.path.realpath(
+	os.path.join(os.getcwd(), os.path.dirname(__file__)))
+if os.name == 'nt':
+	__location__ = __location__.replace('\\','/')
+
+
+#/home/kosinkadink/arduino-1.6.5-r5
+
+# Copy and replace all libs from script's lib folder
+def move_libs(jno_dict):
+	ARDUINO_SKETCH_LIBS = jno_dict["ARDUINO_SKETCH_LIBS"]
+	ARDUINO_EXEC_LIBS = jno_dict["EXEC_LIBS"]
+	for item in os.listdir(ARDUINO_SKETCH_LIBS):
+		itempath = os.path.join(ARDUINO_SKETCH_LIBS,item)
+		if os.path.isdir(itempath):
+			execpath = os.path.join(ARDUINO_EXEC_LIBS,item)
+			try:
+				shutil.copytree(itempath,execpath)
+			except OSError:
+				shutil.rmtree(execpath)
+				shutil.copytree(itempath,execpath)
+			finally:
+				print 'Copied lib {}'.format(item)
+
+
+# Initialize directories for jno to function well
+def init_jno():
+	lib_dir = os.path.join(__location__,'lib')
+	sketch_dir = os.path.join(__location__,'sketch')
+	jno_file = os.path.join(__location__,'jno.jno')
+	# create lib if does not exist
+	if not os.path.exists(lib_dir):
+		os.mkdir(lib_dir)
+	# create sketch if does not exist
+	if not os.path.exists(sketch_dir):
+		os.mkdir(sketch_dir)
+	# create jno.jno 
+	if not os.path.exists(jno_file):
+		with open(jno_file,'wb') as jno:
+			jno.write("EXEC_DIR=NULL\n")
+			jno.write("EXEC_LIBS=DEFAULT\n")
+			jno.write("BOARD=arduino:avr:uno\n")
+			jno.write("BAUDRATE=9600\n")
+			# see if running on Windows
+			if os.name == 'nt':
+				jno.write("PORT=COM3\n")
+			else:
+				jno.write("PORT=/dev/ttyACM0\n")
+			jno.write("SKETCH_DIR=/\n")
+
+	print 'jno dirs and file created'
+
+
+#get arguments from .jno file
+def parse_jno():
+	jno_dict = {}
+	with open(os.path.join(__location__,'jno.jno'),'rb') as jno:
+		for line in jno:
+			line = line.strip()
+			#see if line gives directory of arduino executive file
+			if line.startswith("EXEC_DIR"):
+				jno_dict["EXEC_DIR"] = line.split('=')[1]
+			elif line.startswith("EXEC_LIBS"):
+				jno_dict["EXEC_LIBS"] = line.split('=')[1]
+			elif line.startswith("BOARD"):
+				jno_dict["BOARD"] = line.split('=')[1]
+			elif line.startswith("BAUDRATE"):
+				jno_dict["BAUDRATE"] = line.split('=')[1]
+			elif line.startswith("SKETCH_DIR"):
+				jno_dict["SKETCH_DIR"] = line.split('=')[1]
+			#elif line.startswith("")
+	#verify necessities are filled out
+	if jno_dict["EXEC_DIR"] == "NULL":
+		raise ValueError("no EXEC_DIR provided for arduino IDE")
+	if jno_dict["EXEC_LIBS"] == "DEFAULT":
+		jno_dict["EXEC_LIBS"] = os.path.join(jno_dict["EXEC_DIR"],"libraries")
+	jno_dict["EXEC_SCRIPT"] = os.path.join(jno_dict["EXEC_DIR"],"arduino")
+	if jno_dict["SKETCH_DIR"] == "/":
+		jno_dict["SKETCH_DIR"] = __location__
+	#add lib dir and sketch dir to dictionary
+	jno_dict["ARDUINO_SKETCH"] = os.path.join(__location__,'sketch/sketch.ino')
+	jno_dict["ARDUINO_SKETCH_LIBS"] = os.path.join(__location__,'lib')
+	return jno_dict
+
+
+# Open serial communication with arduino
+def start_serialcomm(jno_dict):
+	pass
+
+
+def main(argv):
+	try:
+		jno_dict = parse_jno()
+	except IOError:
+		init_jno()
+		jno_dict = parse_jno()
+	print jno_dict
+	arg_list = [jno_dict["EXEC_SCRIPT"]]
+	try:
+		opts,args = getopt.getopt(argv, 'ivup:b:',['init','verify=','upload=','port=','board='])
+	except getopt.GetoptError:
+		print 'invalid arguments'
+		quit()
+	for opt, arg in opts:
+		if opt in ("-v","--verify"):
+			arg_list.append("--verify")
+			arg_list.append(jno_dict["ARDUINO_SKETCH"])
+		if opt in ("-u","--upload"):
+			arg_list.append("--upload")
+			arg_list.append(jno_dict["ARDUINO_SKETCH"])
+		if opt in ("-p","--port"):
+			if arg.strip() == "":
+				raise ValueError("no port provided")
+			arg_list.append("--port")
+			arg_list.append(arg)
+		if opt in ("-b","--board"):
+			if arg.strip() == "":
+				raise ValueError("no board type provided")
+			arg_list.append("--board")
+			arg_list.append("arduino:avr:"+arg.strip())
+		if opt in ("-i","--init"):
+			init_jno()
+			quit()
+	if len(arg_list) < 2:
+		print "no arguments received, doing nothing..."
+	else:
+		if "--upload" in arg_list and "--port" not in arg_list:
+			arg_list.append("--port")
+			arg_list.append(jno_dict["PORT"])
+		#add particular board, uncomment the correct one
+		if "--board" not in arg_list:
+			arg_list.append("--board")
+			arg_list.append(jno_dict["BOARD"])
+		##### arg_list.append("arduino:avr:uno")
+		
+		print arg_list
+		
+		#decide if to move libraries over
+		if "--upload" in arg_list or "--verify" in arg_list:
+			move_libs(jno_dict)
+		
+		os.system('cd ~')
+		subprocess.check_call(arg_list)
+		print 'ALL ACTIONS COMPLETED'
+
+
+if __name__ == '__main__':
+	main(sys.argv[1:])
