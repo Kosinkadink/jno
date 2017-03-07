@@ -190,5 +190,7 @@ if __name__ == '__main__':
 		args[args.index("serial")] = "--serial"
 	elif "upload" in args:
 		args[args.index("upload")] = "--upload"
+	elif "init" in args:
+		args[args.index("init")] = "--init"
 	
 	main(args)
