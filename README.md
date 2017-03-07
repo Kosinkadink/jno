@@ -37,7 +37,7 @@ Modify the created *jno.jno* file to fit your needs. Note that all paths must be
 |-- sketch
 |   `-- sketch.ino
 |
-|-- jno         [this sript]
+|-- jno         [this script]
 `-- jno.jno
 ```
 
