@@ -1,5 +1,5 @@
 # jno
-Command line interface wrapper for Arduino IDE, inspired by ino
+Command line interface wrapper for Arduino IDE, inspired by ino.
 
 # Usage
 Place jno script into a folder (by default, expects to be in same directory as sketch/sketch.ino).
@@ -37,8 +37,8 @@ Modify the created *jno.jno* file to fit your needs. Note that all paths must be
 |-- sketch
 |   `-- sketch.ino
 |
-|-- ino         [this sript]
-`-- ino.ino
+|-- jno         [this sript]
+`-- jno.jno
 ```
 
 # Actions
