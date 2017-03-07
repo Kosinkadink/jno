@@ -42,7 +42,7 @@ Modify the created *jno.jno* file to fit your needs. Note that all paths must be
 ```
 
 # Actions
-*./jno build [parameters]*: compile the code
+*./jno build (or -v) [parameters]*: compile the code
 
 *./jno upload (or -u) [parameters]*: compile + upload the code
 
