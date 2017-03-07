@@ -42,9 +42,9 @@ Modify the created *jno.jno* file to fit your needs. Note that all paths must be
 ```
 
 # Actions
-*./jno --verify (or -v) [parameters]*: compile the code
+*./jno build [parameters]*: compile the code
 
-*./jno --upload (or -u) [parameters]*: compile + upload the code
+*./jno upload (or -u) [parameters]*: compile + upload the code
 
 *./jno serial [parameters]*: start serial communication with arduino
 
