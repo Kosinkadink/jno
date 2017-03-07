@@ -16,7 +16,7 @@ OR
 # Initialize
 To initialize directories and .jno file, perform
 
-	./jno --init
+	./jno init
 	
 Modify the created *jno.jno* file to fit your needs. Note that all paths must be absolute, except for SCRIPT_DIR if the directory does not begin with /
 
