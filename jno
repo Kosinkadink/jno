@@ -56,6 +56,7 @@ def init_jno():
 			jno.write("SKETCH_DIR==/\n")
 
 	print 'jno dirs and file created'
+	print "edit jno.jno to use right Arduino IDE"
 
 
 # Get arguments from .jno file
@@ -120,7 +121,7 @@ def main(argv):
 	if DEBUG: print jno_dict
 	arg_list = [jno_dict["EXEC_SCRIPT"]]
 	try:
-		opts,args = getopt.getopt(argv, 'ivup:b:',['serial','init','verify','upload','build','port=','board=','baud='])
+		opts,args = getopt.getopt(argv, 'vup:b:',['serial','verify','upload','build','port=','board=','baud='])
 	except getopt.GetoptError:
 		print 'invalid arguments'
 		quit()
@@ -145,9 +146,6 @@ def main(argv):
 			if arg.strip() == "":
 				raise ValueError("no baudrate provided")
 			jno_dict["BAUDRATE"] = arg
-		if opt in ("-i","--init"):
-			init_jno()
-			quit()
 		if opt in ("--serial"):
 			serialComm = True
 
@@ -191,6 +189,7 @@ if __name__ == '__main__':
 	elif "upload" in args:
 		args[args.index("upload")] = "--upload"
 	elif "init" in args:
-		args[args.index("init")] = "--init"
+		init_jno()
+		quit()
 	
 	main(args)
