@@ -109,13 +109,26 @@ def return_code_qualifier(return_code):
 # Open serial communication with arduino
 def start_serialcomm(jno_dict):
 	PORT = jno_dict["PORT"]
-	BAUD = int(jno_dict["BAUDRATE"])
-	ard_serial = serial.Serial(PORT, BAUD)
+	
+	try:
+		BAUD = int(jno_dict["BAUDRATE"])
+		ard_serial = serial.Serial(PORT, BAUD)
+	except ValueError,e:
+		print str(e)
+		quit()
+	except Exception,e:
+		print str(e)
+		quit()
+		
 	if ard_serial.isOpen():
 		ard_serial.close()
 		ard_serial.open()
-	print 'successfully started serial on {0} with baud {1}'.format(PORT,BAUD)
-	print 'type EXIT to leave serial'
+
+	print ':: successfully started serial'
+	print ':: port: {}'.format(PORT)
+	print ':: baudrate: {}'.format(BAUD)
+	print ':: type EXIT to leave serial'
+	print ''
 	# create thread for receiving serial stuff
 	ser_event = threading.Event()
 	ser_message_sent = threading.Event()
@@ -168,6 +181,7 @@ def main(argv):
 				raise ValueError("no port provided")
 			arg_list.append("--port")
 			arg_list.append(arg)
+			jno_dict["PORT"] = arg
 		if opt in ("--board"):
 			if arg.strip() == "":
 				raise ValueError("no board type provided")
