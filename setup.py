@@ -8,19 +8,28 @@ readme_contents = open("README.md").read()
 
 jno_data = ['jno.jno']
 
+jno_version = '0.1.0'
+
 #input into setup
 setup(
 	name='jno',
-	version='0.1.0',
+	version=jno_version,
 	description='Command line interface wrapper for Arduino IDE, inspired by ino',
 	long_description=readme_contents,
 	url = 'https://github.com/kosinkadink/jno',
-	download_url = 'https://github.com/kosinkadink/jno/archive/0.1.0.tar.gz',
+	download_url = 'https://github.com/kosinkadink/jno/archive/{}.tar.gz'.format(jno_version),
 	author='Jedrzej Kosinski',
 	license='MIT',
 	keywords='arduino interface wrapper',
 	packages=['jno','jno.commands'],
 	package_data={'jno':jno_data},
 	scripts=['bin/jno'],
-	classifers=[]
+	classifiers=[
+		"Development Status :: 4 - Beta",
+		"License :: OSI Approved :: MIT License",
+		"Intended Audience :: Developers",
+		"Operating System :: OS Independent",
+		"Programming Language :: Python",
+		"Topic :: Software Development :: Embedded Systems"
+	],
 )
