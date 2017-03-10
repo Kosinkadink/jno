@@ -2,3 +2,5 @@
 *.jno
 lib
 sketch
+build
+*.egg-info
