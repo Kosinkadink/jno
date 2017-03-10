@@ -4,3 +4,4 @@ lib
 sketch
 build
 *.egg-info
+dist
