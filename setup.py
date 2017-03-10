@@ -8,7 +8,7 @@ readme_contents = open("README.md").read()
 
 jno_data = ['jno.jno']
 
-jno_version = '0.1.0'
+jno_version = '0.1.2'
 
 #input into setup
 setup(
@@ -19,6 +19,7 @@ setup(
 	url = 'https://github.com/kosinkadink/jno',
 	download_url = 'https://github.com/kosinkadink/jno/archive/{}.tar.gz'.format(jno_version),
 	author='Jedrzej Kosinski',
+	author_email='kosinkadink1@gmail.com',
 	license='MIT',
 	keywords='arduino interface wrapper',
 	packages=['jno','jno.commands'],
