@@ -38,7 +38,7 @@ The commands supported are:
 
 *jno serial [parameters]*: start a serial monitor
 
-*jno init*: initialize current working directory with src/, sketch/, and jno.jno if they are not present
+*jno init*: initialize current working directory with lib/, sketch/, and *jno.jno* if they are not present
 
 *jno setlocal [setting]*: change setting in local *jno.jno*
 
