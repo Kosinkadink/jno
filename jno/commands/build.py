@@ -30,11 +30,11 @@ class Build(Command):
 			quit()
 		for opt, arg in opts:
 			if opt in ("--board"):
-				jno_dict["BOARD"] = "arduino:avr:"+arg.strip()
+				jno_dict["BOARD"] = self.formatBoard(arg.strip())
 
 		# add board params
 		arg_list.append("--board")
-		arg_list.append(jno_dict["BOARD"])
+		arg_list.append(self.formatBoard(jno_dict["BOARD"]))
 
 		return arg_list
 				

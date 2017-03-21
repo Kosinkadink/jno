@@ -8,6 +8,7 @@ from jno.commands.init import Init
 from jno.commands.jnoserial import JnoSerial
 from jno.commands.build import Build
 from jno.commands.upload import Upload
+from jno.commands.listmodels import ListModels
 from jno.util import JnoException
 
 # directory from which this script is ran
@@ -38,6 +39,9 @@ def setglobal_command(argv):
 def setlocal_command(argv):
 	SetDefault(argv,os.getcwd())
 
+def listmodels_command(argv):
+	ListModels(argv,__location__)
+
 
 # Dictionary linking option to function
 command_dict = {
@@ -46,7 +50,8 @@ command_dict = {
 	"upload": upload_command,
 	"serial": serial_command,
 	"setglobal": setglobal_command,
-	"setlocal": setlocal_command
+	"setlocal": setlocal_command,
+	"listmodels": listmodels_command
 }
 
 
