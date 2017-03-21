@@ -40,6 +40,8 @@ The commands supported are:
 
 *jno init*: initialize current working directory with lib/, sketch/, and *jno.jno* if they are not present
 
+*jno listmodels*: list the board models supported by your Arduino IDE
+
 *jno setlocal [setting]*: change setting in local *jno.jno*
 
 *jno setglobal [setting]*: change setting in global *jno.jno*
@@ -51,7 +53,7 @@ These settings are the same as those contained in *jno.jno* files. These setting
 
 *--EXEC_LIBS=/some/dir/libraries*: directory that Arduino IDE loads libraries from. By DEFAULT, this uses arduino's internal libraries/ directory, but this may be unsafe if your local lib/ contents have the same name as core libraries.
 
-*--BOARD=arduino:avr:boardname*: board that code should be compiled for. Possible 'boardname' choices include *uno* and *mega*. In the current release, they must be typed out as 'arduino:avr:boardname'. This will be improved later.
+*--BOARD=boardname*: board that code should be compiled for. Possible 'boardname' choices include *uno* and *mega*. For boardname options, use the *listmodels* command.
 
 *--PORT=/some/port*: port of arduino to upload code or start serial communication. On Linux, dmesg is useful in determing this.
 
@@ -66,7 +68,7 @@ Parameters are used only for the current invocation of the command and override 
 
 *-p, --port=/some/port*: see --PORT above. Affects the upload and serial commands.
 
-*--board=boardname*: just like --BOARDNAME, but do not include the *arduino:avr:* portion. Affects the build and upload commands.
+*--board=boardname*: see --BOARD above. Affects the build and upload commands.
 
 # jno Directory Structure
 
