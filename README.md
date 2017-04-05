@@ -55,7 +55,7 @@ These settings are the same as those contained in *jno.jno* files. These setting
 
 *--BOARD=boardname*: board that code should be compiled for. Possible 'boardname' choices include *uno* and *mega*. For boardname options, use the *listmodels* command.
 
-*--PORT=/some/port*: port of arduino to upload code or start serial communication. On Linux, dmesg is useful in determing this.
+*--PORT=/some/port*: port of arduino to upload code or start serial communication. On Linux, dmesg is useful in determining this.
 
 *--BAUDRATE=9600*: baudrate used for serial communication. Must be an integer.
 

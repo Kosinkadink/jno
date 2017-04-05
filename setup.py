@@ -8,7 +8,7 @@ readme_contents = open("README.md").read()
 
 jno_data = ['jno.jno']
 
-jno_version = '0.2.1'
+jno_version = '0.2.2'
 
 #input into setup
 setup(
@@ -24,6 +24,7 @@ setup(
 	keywords='arduino interface wrapper',
 	packages=['jno','jno.commands'],
 	package_data={'jno':jno_data},
+	install_requires=install_requirements,
 	scripts=['bin/jno'],
 	classifiers=[
 		"Development Status :: 4 - Beta",

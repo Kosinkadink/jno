@@ -83,6 +83,7 @@ class JnoSerial(Command):
 			sys.stdout.write(recvd)
 			if not ser_message_sent.is_set() and recvd:
 				print ""
+				ser_message_sent.set()
 
 
 	# Return first working serial connection
