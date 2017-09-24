@@ -1,5 +1,5 @@
 *.pyc
-*.jno
+jno/jno.jno
 lib
 sketch
 build
