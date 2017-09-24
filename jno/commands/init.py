@@ -23,7 +23,7 @@ class Init(Command):
 			with open(jno_file,'wb') as jno:
 				jno.write("EXEC_DIR==NULL\n")
 				jno.write("EXEC_LIBS==DEFAULT\n")
-				jno.write("BOARD==arduino:avr:uno\n")
+				jno.write("BOARD==uno\n")
 				jno.write("BAUDRATE==9600\n")
 				jno.write("PORT==DEFAULT\n")
 				jno.write("SKETCH_DIR==DEFAULT\n")
