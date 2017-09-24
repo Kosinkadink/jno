@@ -1,4 +1,5 @@
 import os
+import re
 import shutil
 import subprocess
 from colorama import Fore
@@ -110,3 +111,44 @@ def return_code_qualifier(return_code):
 		4:Fore.RED + "Preference passed to --get-pref does not exist"
 	}
 	return return_code_dict[return_code]
+
+# Get and print list of all supported models
+def get_all_models(jno_dict):
+	arduino_hardware_dir = os.path.join(jno_dict["EXEC_DIR"],"hardware/arduino/avr/")
+	return get_boards_from_directory(arduino_hardware_dir)
+
+# Returns model list from boards.txt in specified directory
+def get_boards_from_directory(fileloc):
+	# models is a list of tuples
+	# [(arduino_label,readable_label,[cpu_type,...]),...]
+	models = []
+	with open(os.path.join(fileloc,"boards.txt"),'rb') as modelfile:
+		current_arduino_label = None
+		current_readable_label = None
+		current_cpu_types = []
+		for line in modelfile:
+			if ".name=" in line:
+				arduino_label,readable_label = line.strip().split(".name=")
+				# check if we are on a different type of board now
+				if current_arduino_label is not None and arduino_label != current_arduino_label:
+					arduino_model_data = [current_arduino_label,current_readable_label]
+					arduino_model_data.append(current_cpu_types)
+					models.append(tuple(arduino_model_data))
+				# change the current labels
+				current_arduino_label = arduino_label
+				current_readable_label = readable_label
+				current_cpu_types = []
+			# see if it is a new model
+			elif current_arduino_label is not None:
+				search_object = re.search(current_arduino_label+".menu.cpu.[a-zA-Z0-9]*=", line)
+				if search_object is not None: 
+					cpu_model = search_object.group(0)[:-1].split(".")[-1]
+					current_cpu_types.append(cpu_model)
+
+		# add last entry
+		if current_arduino_label is not None:
+			arduino_model_data = [current_arduino_label,current_readable_label]
+			arduino_model_data.append(current_cpu_types)
+			models.append(tuple(arduino_model_data))
+
+	return models
