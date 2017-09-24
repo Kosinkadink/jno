@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+from colorama import Fore
 
 
 # Parameters to be included in .jno
@@ -87,7 +88,7 @@ def move_libs(jno_dict):
 				shutil.rmtree(execpath)
 				shutil.copytree(itempath,execpath)
 			finally:
-				print 'Copied lib {}'.format(item)
+				print(Fore.YELLOW + 'Copied lib {}'.format(item) + Fore.RESET)
 
 
 # Run arduino with an assembled argument list
@@ -96,16 +97,16 @@ def run_arduino_process(arg_list):
 		returned = subprocess.check_call(arg_list)
 	except subprocess.CalledProcessError,e:
 		returned = e.returncode
-	print 'ALL ACTIONS COMPLETED: {}'.format(return_code_qualifier(returned))
+	print(Fore.YELLOW + 'All Actions Complete: {}'.format(return_code_qualifier(returned)) + Fore.RESET)
 
 
 # Returns meaning of return code
 def return_code_qualifier(return_code):
 	return_code_dict = {
-		0:"Success",
-		1:"Build failed or upload failed",
-		2:"Sketch not found",
-		3:"Invalid argument for commandline option",
-		4:"Preference passed to --get-pref does not exist"
+		0:Fore.GREEN + "Success",
+		1:Fore.RED + "Build failed or upload failed",
+		2:Fore.RED + "Sketch not found",
+		3:Fore.RED + "Invalid argument for commandline option",
+		4:Fore.RED + "Preference passed to --get-pref does not exist"
 	}
 	return return_code_dict[return_code]

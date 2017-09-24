@@ -5,6 +5,7 @@ import getopt
 import serial
 import threading
 import sys
+from colorama import Fore
 
 
 # class used for serial communication
@@ -21,7 +22,7 @@ class JnoSerial(Command):
 		try:
 			opts,args = getopt.getopt(argv, 'p:b:',['port=','baud='])
 		except getopt.GetoptError:
-			print 'invalid arguments'
+			print(Fore.RED + 'invalid arguments' + Fore.RESET)
 			quit()
 		for opt, arg in opts:
 			if opt in ("-p","--port"):
@@ -43,21 +44,21 @@ class JnoSerial(Command):
 			BAUD = int(jno_dict["BAUDRATE"])
 			ard_serial = serial.Serial(PORT, BAUD)
 		except ValueError,e:
-			print str(e)
+			print(Fore.RED + str(e) + Fore.RESET)
 			return
 		except Exception,e:
-			print str(e)
+			print(Fore.RED + str(e) + Fore.RESET)
 			return
 			
 		if ard_serial.isOpen():
 			ard_serial.close()
 			ard_serial.open()
 
-		print ':: successfully started serial'
-		print ':: port: {}'.format(PORT)
-		print ':: baudrate: {}'.format(BAUD)
-		print ':: type EXIT to leave serial'
-		print ''
+		print(Fore.CYAN + ':: successfully started serial')
+		print(':: port: {1}{0}{2}'.format(PORT,Fore.YELLOW,Fore.CYAN))
+		print(':: baudrate: {1}{0}{2}'.format(BAUD,Fore.YELLOW,Fore.CYAN))
+		print(':: type {0}EXIT{1} to leave serial'.format(Fore.YELLOW,Fore.CYAN))
+		print('' + Fore.RESET)
 		# create thread for receiving serial stuff
 		ser_event = threading.Event()
 		ser_message_sent = threading.Event()
@@ -82,7 +83,7 @@ class JnoSerial(Command):
 			recvd = ard_serial.read()
 			sys.stdout.write(recvd)
 			if not ser_message_sent.is_set() and recvd:
-				print ""
+				print("")
 				ser_message_sent.set()
 
 

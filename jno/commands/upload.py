@@ -4,6 +4,7 @@ from jno.util import move_libs
 from jno.commands.command import Command
 
 import getopt
+from colorama import Fore
 
 class Upload(Command):
 
@@ -26,7 +27,7 @@ class Upload(Command):
 		try:
 			opts,args = getopt.getopt(argv, 'p:',['board=','port='])
 		except getopt.GetoptError:
-			print 'invalid arguments'
+			print(Fore.RED + 'invalid arguments' + Fore.RESET)
 			quit()
 		for opt, arg in opts:
 			if opt in ("--board"):

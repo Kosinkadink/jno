@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 import sys
 import os
+from colorama import init, Fore
 
 import jno.commands
 from jno.commands.setdefault import SetDefault
@@ -16,6 +17,7 @@ __location__ = os.path.realpath(
 	os.path.join(os.getcwd(), os.path.dirname(__file__)))
 if os.name == 'nt':
 	__location__ = __location__.replace('\\','/')
+	init()
 
 
 DEBUG = False
@@ -58,18 +60,18 @@ command_dict = {
 def main():
 	args = sys.argv[1:]
 	if len(args) == 0:
-		print "No commands given"
+		print(Fore.RED + "No commands given" + Fore.RESET)
 	else:
 		command = args[0]
 		try:
 			jno_function = command_dict[command]
 		except KeyError,e:
-			print "ERROR: Command {} not found".format(command)
+			print(Fore.RED + "ERROR: Command " + Fore.YELLOW + command + Fore.RED + " not found" + Fore.RESET)
 		else:
 			try:
 				jno_function(args)
 			except JnoException,e:
-				print 'ERROR: {}'.format(str(e))
+				print(Fore.RED + "ERROR: {}".format(str(e)) + Fore.RESET)
 
 if __name__ == '__main__':
 	main()
