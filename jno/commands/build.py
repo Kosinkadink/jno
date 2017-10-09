@@ -37,4 +37,3 @@ class Build(Command):
 		arg_list.append(self.formatBoard(jno_dict["BOARD"],jno_dict))
 
 		return arg_list
-				

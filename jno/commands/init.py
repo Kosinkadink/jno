@@ -15,9 +15,18 @@ class Init(Command):
 		# create lib if does not exist
 		if not os.path.exists(lib_dir):
 			os.mkdir(lib_dir)
+			# create putlibrarieshere.txt file, useful when using with git so directory gets committed
+			with open(os.path.join(lib_dir,"putlibrarieshere.txt"),"wb") as libfile:
+				pass
+
 		# create sketch if does not exist
 		if not os.path.exists(sketch_dir):
 			os.mkdir(sketch_dir)
+			# create sketch.ino in sketch dir with setup/loop functions
+			with open(os.path.join(sketch_dir,"sketch.ino"),"wb") as sketchfile:
+				sketchfile.write("void setup() {\n\n}\n")
+				sketchfile.write("void loop() {\n\n}\n")
+
 		# create jno.jno 
 		if not os.path.exists(jno_file):
 			with open(jno_file,'wb') as jno:
