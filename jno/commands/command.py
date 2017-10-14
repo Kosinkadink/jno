@@ -19,7 +19,11 @@ class Command():
 		prepared_board_string = None
 		board_name = None
 		if not board.startswith("arduino:avr:"):
-			prepared_board_string = "arduino:avr:{}".format(board)
+			if ":" in board:
+				prepared_board_string = board
+				board_name = prepared_board_string.split(":")[2]
+			else:
+				prepared_board_string = "arduino:avr:{}".format(board)
 		else:
 			prepared_board_string = board
 			board_name = prepared_board_string.split(":")[2]

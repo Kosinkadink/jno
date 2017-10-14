@@ -35,5 +35,6 @@ class Build(Command):
 		# add board params
 		arg_list.append("--board")
 		arg_list.append(self.formatBoard(jno_dict["BOARD"],jno_dict))
+		arg_list.append("--verbose")
 
 		return arg_list
