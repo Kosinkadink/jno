@@ -1,6 +1,7 @@
 from jno.util import interpret_configs
 from jno.util import run_arduino_process
 from jno.util import move_libs
+from jno.util import JnoException
 from jno.commands.command import Command
 
 import getopt
