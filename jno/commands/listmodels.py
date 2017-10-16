@@ -18,13 +18,14 @@ class ListModels(Command):
 		print("======================")
 		print("SUPPORTED BOARD MODELS")
 		print("----------------------")
-		print("BOARD :: Board Name (cpu options)")
-		for data in models:
+		print(Fore.YELLOW + "Board " + Fore.CYAN + "::" + Fore.MAGENTA + " Board Name" + Fore.CYAN)
+		print("----------------------")
+		for model in models:
 			# If there are no cpu options, only show board and board name
-			if len(data[2]) == 0:
-				print("{2}{0}{3} :: {4}{1}{3}".format(data[0],data[1],Fore.YELLOW,Fore.CYAN,Fore.MAGENTA,Fore.CYAN))
-			else:
+			#if len(data[2]) == 0:
+			print("{2}{0}{3} :: {4}{1}{3}".format(model.board,model.board_name,Fore.YELLOW,Fore.CYAN,Fore.MAGENTA,Fore.CYAN))
+			#else:
 				# Print cpus if there are any possible to specify
-				print("{3}{0}{4} :: {5}{1}{6} (cpu={2}){4}".format(data[0],data[1],','.join(data[2]),Fore.YELLOW,Fore.CYAN,Fore.MAGENTA,Fore.GREEN))
+			#	print("{3}{0}{4} :: {5}{1}{6} (cpu={2}){4}".format(data[0],data[1],','.join(data[2]),Fore.YELLOW,Fore.CYAN,Fore.MAGENTA,Fore.GREEN))
 		print("======================")
 		print(""+Fore.RESET)

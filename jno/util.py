@@ -2,6 +2,7 @@ import os
 import re
 import shutil
 import subprocess
+from collections import OrderedDict, namedtuple
 from colorama import Fore
 
 
@@ -19,6 +20,48 @@ valid_params = {
 # Exception class for jno-related exceptions
 class JnoException(Exception):
 	pass
+
+# A named tuple used to represent a specific menu item
+MenuItem = namedtuple("MenuItem", ["name","label"])
+
+# ModelData that is used to store label and all the subitems
+class ModelData(object):
+		def __init__(self, label):
+			self.label = label
+			self.items = []
+
+		def append(self, item):
+			self.items.append(item)
+
+		def __str__(self):
+			return "'ModelData with Label: {} and Items: {}'".format(self.label,self.items)
+
+		def __repr__(self):
+			return str(self)
+
+# Model that stores data for a particular arduino board
+class Model(object):
+
+	def __init__(self):
+		self.board = None
+		self.board_name = None
+		self.menu_item_dict = OrderedDict()
+
+	# initialize menu item dictionary
+	def initialize_dict(self, expected_menu_list):
+		for menu_item_type,menu_item_label in expected_menu_list:
+			self.menu_item_dict[menu_item_type] = ModelData(menu_item_label)
+
+	# add a menu item for a particular type
+	def add_menu_item(self, menu_item_type, menu_item_name, menu_item_label):
+		self.menu_item_dict[menu_item_type].append(MenuItem(menu_item_name,menu_item_label))
+
+	def __str__(self):
+		return "'Model with board: {}, board_name: {}, and item dict: {}".format(self.board,self.board_name,self.menu_item_dict)
+
+	def __repr__(self):
+		return str(self)
+
 
 
 # Replaces temporary dictionary values with actual values
@@ -114,11 +157,30 @@ def return_code_qualifier(return_code):
 
 # Get and print list of all supported models
 def get_all_models(jno_dict):
-	arduino_hardware_dir = os.path.join(jno_dict["EXEC_DIR"],"hardware/arduino/avr/")
-	return get_boards_from_directory(arduino_hardware_dir)
+	# directores to ignore
+	ignore_dirs = ["tools"]
+	# get hardware directory
+	arduino_hardware_dir = os.path.join(jno_dict["EXEC_DIR"],"hardware")
+	# used to store all models
+	all_models = []
+	# do a walk
+	directories = next(os.walk(arduino_hardware_dir))[1]
+	for directory in directories:
+		# if not an ignored dir, go into it
+		if directory not in ignore_dirs:
+			print directory
+			directory_path = os.path.join(arduino_hardware_dir,directory)
+			subdirectories = next(os.walk(directory_path))[1]
+			# in each directory here, go into it and do a get_boards... call
+			for subdir in subdirectories:
+				print subdir
+				subdir_path = os.path.join(directory_path, subdir)
+				all_models.extend(get_boards_from_directory(subdir_path))
+	#arduino_hardware_dir = os.path.join(jno_dict["EXEC_DIR"],"hardware/arduino/avr/")
+	return all_models
 
 # Returns model list from boards.txt in specified directory
-def get_boards_from_directory(fileloc):
+def get_boards_from_directory_OLD(fileloc):
 	# models is a list of tuples
 	# [(arduino_label,readable_label,[cpu_type,...]),...]
 	models = []
@@ -150,5 +212,67 @@ def get_boards_from_directory(fileloc):
 			arduino_model_data = [current_arduino_label,current_readable_label]
 			arduino_model_data.append(current_cpu_types)
 			models.append(tuple(arduino_model_data))
+
+	return models
+
+# Returns model list from boards.txt in specified directory
+def get_boards_from_directory(fileloc):
+	# models is a list of Model classes
+	models = []
+	with open(os.path.join(fileloc,"boards.txt"),'rb') as modelfile:
+
+		still_expecting_menu_item_types = True
+		
+		# list for expected menu item types [(menu_item_type, menu_item_label), ...]
+		expected_menu_item_types = []
+		# keep track of current board info
+		current_model = Model()
+		
+		for line in modelfile:
+			# strip the line
+			line = line.strip()
+			# skip empty lines
+			if len(line) == 0:
+				continue
+			# at the beginning of the file, we expect to see all the possible menu item types. Collect them
+			if still_expecting_menu_item_types and current_model.board is None:
+				menu_type_search_object = re.search("menu.[a-zA-Z0-9]*=(.*)", line)
+				if menu_type_search_object is not None:
+					# get menu item type + readable label
+					expected_type_label,expected_readable_label = menu_type_search_object.group(0).split("=")
+					expected_type_label = expected_type_label.split(".")[1]
+					expected_menu_item_types.append((expected_type_label, expected_readable_label))
+					continue
+				
+			# check if line depicts board name
+			if ".name=" in line:
+				# this is not a new menu item type line, so set expectation to False
+				if still_expecting_menu_item_types:
+					still_expecting_menu_item_types = False
+
+				arduino_label,readable_label = line.strip().split(".name=")
+				# check if we are on a different type of board now
+				if current_model.board is not None and arduino_label != current_model.board:
+					models.append(current_model)
+					current_model = Model()
+				# change the current labels
+				current_model.board = arduino_label
+				current_model.board_name = readable_label
+				current_model.initialize_dict(expected_menu_item_types)
+
+			# see if it is a different skew of current board type
+			elif current_model.board is not None:
+				search_object = re.search(current_model.board+".menu.[a-zA-Z0-9]*.[a-zA-Z0-9]*=(.*)", line)
+				if search_object is not None:
+					# figure out which menu type we got
+					menu_item_type,menu_item_label = search_object.group(0).split("=")
+					menu_item_type,menu_item_name = menu_item_type.split(".")[-2:]
+					# add this menu_item_type + label to the proper item in current_menu_items
+					current_model.add_menu_item(menu_item_type,menu_item_name,menu_item_label)
+
+		# add last entry
+		if current_model.board is not None:
+			models.append(current_model)
+			current_model = Model()
 
 	return models
