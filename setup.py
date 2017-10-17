@@ -8,7 +8,7 @@ readme_contents = open("README.md").read()
 
 jno_data = ['jno.jno']
 
-jno_version = '0.3.1'
+jno_version = '0.4.0'
 
 #input into setup
 setup(
@@ -31,7 +31,8 @@ setup(
 		"License :: OSI Approved :: MIT License",
 		"Intended Audience :: Developers",
 		"Operating System :: OS Independent",
-		"Programming Language :: Python",
+		"Programming Language :: Python :: 2",
+		"Programming Language :: Python :: 3",
 		"Topic :: Software Development :: Embedded Systems"
 	],
 )
