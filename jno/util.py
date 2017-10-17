@@ -60,7 +60,7 @@ def read_configs(__location__):
 def parse_jno_file(jno_dict,jno_dir):
 	new_dict = {}
 
-	with open(os.path.join(jno_dir,'jno.jno'),'rb') as jno:
+	with open(os.path.join(jno_dir,'jno.jno'),'r') as jno:
 		for line in jno:
 			line = line.strip()
 			if len(line) == 0:
@@ -80,7 +80,6 @@ def parse_jno_file(jno_dict,jno_dir):
 
 # Cleans selected directory
 def clean_directory(dir_to_clean):
-	print dir_to_clean
 	# if exists, remove and replace
 	if os.path.isdir(dir_to_clean):
 		try:
@@ -99,7 +98,7 @@ def clean_directory(dir_to_clean):
 def run_arduino_process(arg_list):
 	try:
 		returned = subprocess.check_call(arg_list)
-	except subprocess.CalledProcessError,e:
+	except subprocess.CalledProcessError as e:
 		returned = e.returncode
 	print(Fore.YELLOW + 'All Actions Complete: {}'.format(return_code_qualifier(returned)) + Fore.RESET)
 
@@ -123,7 +122,6 @@ def create_build_directory(jno_dict):
 	# while we are at it, check if library directory has the right name
 	lib_dir = os.path.join(jno_dict["SKETCH_DIR"],"libraries")
 	lib_dir_old = os.path.join(jno_dict["SKETCH_DIR"],"lib")
-	print lib_dir_old
 	if os.path.isdir(lib_dir_old):
 		os.rename(lib_dir_old,lib_dir)
 
@@ -171,7 +169,7 @@ def get_all_models(jno_dict):
 def get_boards_from_directory(fileloc,prefix):
 	# models is a list of Model classes
 	models = []
-	with open(os.path.join(fileloc,"boards.txt"),'rb') as modelfile:
+	with open(os.path.join(fileloc,"boards.txt"),'r') as modelfile:
 
 		still_expecting_menu_item_types = True
 		

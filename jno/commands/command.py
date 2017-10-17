@@ -2,6 +2,7 @@
 from jno.util import get_all_models
 from jno.util import JnoException
 from colorama import Fore
+from sys import version_info
 
 
 class Command():
@@ -83,16 +84,12 @@ class Command():
 			raise JnoException("board '{}' not recognized".format(board))
 
 		# figure out which params were provided; if not provided, choose default val
-		for param_type,data in model.menu_item_dict.iteritems():
-			# if this param type doesn't have choices, skip it
-			if data.is_empty():
-				continue
-			# if this param was provided by the user, skip it
-			if param_type in param_list:
-				continue
-			# otherwise, choose default value for it
-			param_list.append(param_type)
-			value_list.append(data.get_first().name)
+		if version_info < (3,0): # python2 code
+			for param_type,data in model.menu_item_dict.iteritems():
+				self.fill_out_param_value_lists(param_list,value_list,param_type,data)
+		else: # python3 code
+			for param_type,data in model.menu_item_dict.items():
+				self.fill_out_param_value_lists(param_list,value_list,param_type,data)
 
 		# if there are parameters to be input, account for that
 		if len(param_list) > 0:
@@ -108,3 +105,15 @@ class Command():
 			prepared_board_string = model.get_prefix() + model.board
 		# return prepared string
 		return prepared_board_string
+
+	# Helper function for formatBoard function
+	def fill_out_param_value_lists(self,param_list,value_list,param_type,data):
+		# if this param type doesn't have choices, skip it
+		if data.is_empty():
+			return
+		# if this param was provided by the user, skip it
+		if param_type in param_list:
+			return
+		# otherwise, choose default value for it
+		param_list.append(param_type)
+		value_list.append(data.get_first().name)

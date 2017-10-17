@@ -43,10 +43,10 @@ class JnoSerial(Command):
 		try:
 			BAUD = int(jno_dict["BAUDRATE"])
 			ard_serial = serial.Serial(PORT, BAUD)
-		except ValueError,e:
+		except ValueError as e:
 			print(Fore.RED + str(e) + Fore.RESET)
 			return
-		except Exception,e:
+		except Exception as e:
 			print(Fore.RED + str(e) + Fore.RESET)
 			return
 			

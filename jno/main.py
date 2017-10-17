@@ -70,12 +70,12 @@ def main():
 		command = args[0]
 		try:
 			jno_function = command_dict[command]
-		except KeyError,e:
+		except KeyError as e:
 			print(Fore.RED + "ERROR: Command " + Fore.YELLOW + command + Fore.RED + " not found" + Fore.RESET)
 		else:
 			try:
 				jno_function(args)
-			except JnoException,e:
+			except JnoException as e:
 				print(Fore.RED + "ERROR: {}".format(str(e)) + Fore.RESET)
 
 if __name__ == '__main__':

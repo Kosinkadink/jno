@@ -40,4 +40,4 @@ class Init(Command):
 				jno.write("BAUDRATE==9600\n")
 				jno.write("PORT==DEFAULT\n")
 				jno.write("SKETCH_DIR==DEFAULT\n")
-		print 'directories and .jno initialized'
+		print('directories and .jno initialized')
