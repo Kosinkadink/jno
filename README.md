@@ -88,3 +88,8 @@ my_ard_proj
     |
     `-- .build            [directory for build files]
 ```
+
+# References
+
+This tool is a wrapper for the Arduino IDE commandline interface, documented here:
+https://github.com/arduino/Arduino/blob/master/build/shared/manpage.adoc
