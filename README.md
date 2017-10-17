@@ -9,6 +9,10 @@ Using PyPi, the package can be obtained using:
 If you prefer running the setup.py, then download repo, change working directory and do:
 
 	make install
+	
+Or you can use:
+
+	pip install .
 
 # Initialize
 To begin using jno, change working directory to your project. Then, perform:
@@ -38,7 +42,9 @@ The commands supported are:
 
 *jno serial [parameters]*: start a serial monitor
 
-*jno init*: initialize current working directory with lib/, sketch/, and *jno.jno* if they are not present
+*jno init*: initialize current working directory with libraries/, sketch/, and *jno.jno* if they are not present
+
+*jno clean*: removes all build files (located in .build of directory)
 
 *jno listmodels*: list the board models supported by your Arduino IDE
 
@@ -50,8 +56,6 @@ The commands supported are:
 These settings are the same as those contained in *jno.jno* files. These settings WILL be saved locally or globally. Note that lower case inputs are equally as valid. Possible parameters are as follows:
 
 *--EXEC_DIR=/some/dir*: directory that contains the arduino executable file. NULL is the default value.
-
-*--EXEC_LIBS=/some/dir/libraries*: directory that Arduino IDE loads libraries from. By DEFAULT, this uses arduino's internal libraries/ directory, but this may be unsafe if your local lib/ contents have the same name as core libraries.
 
 *--BOARD=boardname*: board that code should be compiled for. Possible 'boardname' choices include *uno* and *mega*. For boardname options, use the *listmodels* command.
 
@@ -68,19 +72,24 @@ Parameters are used only for the current invocation of the command and override 
 
 *-p, --port=/some/port*: see --PORT above. Affects the upload and serial commands.
 
-*--board=boardname*: see --BOARD above. Affects the build and upload commands.
+*--board=boardname*: see --BOARD above. Affects the build, upload, and listmodels commands.
 
 # jno Directory Structure
 
- A valid jno directory contains a *lib* directory, a *sketch* directory with a *sketch.ino* inside, and a *jno.jno* file. The *lib* directory should contain any libraries not included in your Arduino IDE. The structure looks like this:
+ A valid jno directory contains a *libraries* directory, a *sketch* directory with a *sketch.ino* inside, and a *jno.jno* file. The *libraries* directory should contain any libraries not included in your Arduino IDE. The structure looks like this:
 
 ```
 my_ard_proj
     .
-    |-- lib         [directory containing dependencies]
-    |
-    |-- sketch
+    |-- jno.jno           [configuration file]
+    |-- libraries         [directory containing dependencies]
+    |-- sketch            [directory containing main program .ino file]
     |   `-- sketch.ino
     |
-    `-- jno.jno
+    `-- .build            [directory for build files]
 ```
+
+# References
+
+This tool is a wrapper for the Arduino IDE commandline interface, documented here:
+https://github.com/arduino/Arduino/blob/master/build/shared/manpage.adoc
