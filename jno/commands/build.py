@@ -5,7 +5,6 @@ from jno.util import get_common_parameters
 from jno.util import JnoException
 from jno.commands.command import Command
 
-import os
 import getopt
 
 class Build(Command):
@@ -33,12 +32,12 @@ class Build(Command):
 			raise JnoException("invalid arguments")
 		for opt, arg in opts:
 			if opt in ("--board"):
-				jno_dict["BOARD"] = self.formatBoard(arg.strip(),jno_dict)
+				jno_dict["BOARD"] = arg.strip()
 			elif opt in ("--verbose"):
 				arg_list.append("--verbose")
 
 		# add board params
 		arg_list.append("--board")
-		arg_list.append(jno_dict["BOARD"])
+		arg_list.append(self.formatBoard(jno_dict["BOARD"],jno_dict))
 
 		return arg_list

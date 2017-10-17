@@ -6,7 +6,6 @@ from jno.util import JnoException
 from jno.commands.command import Command
 
 import getopt
-from colorama import Fore
 
 class Upload(Command):
 
@@ -15,7 +14,6 @@ class Upload(Command):
 		create_build_directory(jno_dict)
 		arg_list = self.perform_upload(argv[1:],jno_dict)
 		run_arduino_process(arg_list)
-
 
 	# Create argument list for arduino build 
 	def perform_upload(self,argv,jno_dict):
@@ -34,7 +32,7 @@ class Upload(Command):
 			raise JnoException("invalid arguments")
 		for opt, arg in opts:
 			if opt in ("--board"):
-				jno_dict["BOARD"] = self.formatBoard(arg.strip(),jno_dict)
+				jno_dict["BOARD"] = arg.strip()
 			elif opt in ("-p","--port"):
 				jno_dict["PORT"] = arg.strip()
 			elif opt in ("--verbose"):
@@ -42,7 +40,7 @@ class Upload(Command):
 
 		# add board params
 		arg_list.append("--board")
-		arg_list.append(jno_dict["BOARD"])
+		arg_list.append(self.formatBoard(jno_dict["BOARD"],jno_dict))
 		# add port params
 		arg_list.append("--port")
 		arg_list.append(jno_dict["PORT"])
