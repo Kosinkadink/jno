@@ -114,7 +114,7 @@ def return_code_qualifier(return_code):
 
 # Create directory for building
 def create_build_directory(jno_dict):
-	build_directory = os.path.join(jno_dict["SKETCH_DIR"],"build")
+	build_directory = os.path.join(jno_dict["SKETCH_DIR"],".build")
 	if not os.path.isdir(build_directory):
 		os.mkdir(build_directory)
 	# while we are at it, check if library directory has the right name
@@ -127,7 +127,7 @@ def create_build_directory(jno_dict):
 # Returns list of common parameters needed for upload/build
 def get_common_parameters(jno_dict):
 	# we are trying to set the build and sketchbook path
-	build_path = os.path.join(jno_dict["SKETCH_DIR"],"build")
+	build_path = os.path.join(jno_dict["SKETCH_DIR"],".build")
 	sketchbook_path = jno_dict["SKETCH_DIR"]
 	pref_string_list = []
 	argument_list = []

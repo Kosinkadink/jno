@@ -12,7 +12,7 @@ class SetDefault(Command):
 		jno_dict = parse_jno_file(jno_dict,location)
 
 		# get lowercase versions as well
-		opt_arg_list = ['EXEC_DIR=','EXEC_LIBS=','BAUDRATE=','PORT=','BOARD=']
+		opt_arg_list = ['EXEC_DIR=','BAUDRATE=','PORT=','BOARD=']
 		for n in range(0,len(opt_arg_list)):
 			opt_arg_list.append(opt_arg_list[n].lower())
 
