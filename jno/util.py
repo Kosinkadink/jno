@@ -2,6 +2,7 @@ import os
 import re
 import shutil
 import subprocess
+from shutil import rmtree
 from collections import OrderedDict, namedtuple
 from colorama import Fore
 
@@ -33,15 +34,12 @@ def interpret_configs(__location__):
 	# if not absolute directory, make it local
 	elif not jno_dict["SKETCH_DIR"].startswith('/'):
 		jno_dict["SKETCH_DIR"] = os.path.join(os.getcwd(),jno_dict["SKETCH_DIR"])
-	# create EXEC_LIBS, if DEFAULT
-	if jno_dict["EXEC_LIBS"] == 'DEFAULT':
-		jno_dict["EXEC_LIBS"] = os.path.join(jno_dict["EXEC_DIR"],'libraries')
 	# create EXEC_SCRIPT
 	jno_dict["EXEC_SCRIPT"] = os.path.join(jno_dict["EXEC_DIR"],'arduino')
 	# create SKETCH_INO
 	jno_dict["SKETCH_INO"] = os.path.join(jno_dict["SKETCH_DIR"],'sketch/sketch.ino')
 	# create SKETCH_LIBS
-	jno_dict["SKETCH_LIBS"] = os.path.join(jno_dict["SKETCH_DIR"],'lib')
+	jno_dict["SKETCH_LIBS"] = os.path.join(jno_dict["SKETCH_DIR"],'libraries')
 
 	return jno_dict
 
@@ -77,19 +75,21 @@ def parse_jno_file(jno_dict,jno_dir):
 	return jno_dict
 
 
-# Copy and replace all libs from script's lib folder
-def move_libs(jno_dict):
-	for item in os.listdir(jno_dict["SKETCH_LIBS"]):
-		itempath = os.path.join(jno_dict["SKETCH_LIBS"],item)
-		if os.path.isdir(itempath):
-			execpath = os.path.join(jno_dict["EXEC_LIBS"],item)
-			try:
-				shutil.copytree(itempath,execpath)
-			except OSError:
-				shutil.rmtree(execpath)
-				shutil.copytree(itempath,execpath)
-			finally:
-				print(Fore.YELLOW + 'Copied lib {}'.format(item) + Fore.RESET)
+# Cleans selected directory
+def clean_directory(dir_to_clean):
+	print dir_to_clean
+	# if exists, remove and replace
+	if os.path.isdir(dir_to_clean):
+		try:
+			rmtree(dir_to_clean)
+		except:
+			return False
+	# in either case, make the directory again
+	try:
+		os.mkdir(dir_to_clean)
+	except:
+		return False
+	return True 
 
 
 # Run arduino with an assembled argument list
@@ -111,6 +111,35 @@ def return_code_qualifier(return_code):
 		4:Fore.RED + "Preference passed to --get-pref does not exist"
 	}
 	return return_code_dict[return_code]
+
+# Create directory for building
+def create_build_directory(jno_dict):
+	build_directory = os.path.join(jno_dict["SKETCH_DIR"],"build")
+	if not os.path.isdir(build_directory):
+		os.mkdir(build_directory)
+	# while we are at it, check if library directory has the right name
+	lib_dir = os.path.join(jno_dict["SKETCH_DIR"],"libraries")
+	lib_dir_old = os.path.join(jno_dict["SKETCH_DIR"],"lib")
+	print lib_dir_old
+	if os.path.isdir(lib_dir_old):
+		os.rename(lib_dir_old,lib_dir)
+
+# Returns list of common parameters needed for upload/build
+def get_common_parameters(jno_dict):
+	# we are trying to set the build and sketchbook path
+	build_path = os.path.join(jno_dict["SKETCH_DIR"],"build")
+	sketchbook_path = jno_dict["SKETCH_DIR"]
+	pref_string_list = []
+	argument_list = []
+	# fill out string list
+	pref_string_list.append("build.path={}".format(build_path))
+	pref_string_list.append("sketchbook.path={}".format(sketchbook_path))
+	# fill out argument list
+	for pref_string in pref_string_list:
+		argument_list.append("--pref")
+		argument_list.append(pref_string)
+	# return arguments
+	return argument_list
 
 # Get and print list of all supported models
 def get_all_models(jno_dict):
@@ -134,42 +163,6 @@ def get_all_models(jno_dict):
 				all_models.extend(get_boards_from_directory(subdir_path,path_prefix))
 	#arduino_hardware_dir = os.path.join(jno_dict["EXEC_DIR"],"hardware/arduino/avr/")
 	return all_models
-
-# Returns model list from boards.txt in specified directory
-def get_boards_from_directory_OLD(fileloc):
-	# models is a list of tuples
-	# [(arduino_label,readable_label,[cpu_type,...]),...]
-	models = []
-	with open(os.path.join(fileloc,"boards.txt"),'rb') as modelfile:
-		current_arduino_label = None
-		current_readable_label = None
-		current_cpu_types = []
-		for line in modelfile:
-			if ".name=" in line:
-				arduino_label,readable_label = line.strip().split(".name=")
-				# check if we are on a different type of board now
-				if current_arduino_label is not None and arduino_label != current_arduino_label:
-					arduino_model_data = [current_arduino_label,current_readable_label]
-					arduino_model_data.append(current_cpu_types)
-					models.append(tuple(arduino_model_data))
-				# change the current labels
-				current_arduino_label = arduino_label
-				current_readable_label = readable_label
-				current_cpu_types = []
-			# see if it is a new model
-			elif current_arduino_label is not None:
-				search_object = re.search(current_arduino_label+".menu.cpu.[a-zA-Z0-9]*=", line)
-				if search_object is not None: 
-					cpu_model = search_object.group(0)[:-1].split(".")[-1]
-					current_cpu_types.append(cpu_model)
-
-		# add last entry
-		if current_arduino_label is not None:
-			arduino_model_data = [current_arduino_label,current_readable_label]
-			arduino_model_data.append(current_cpu_types)
-			models.append(tuple(arduino_model_data))
-
-	return models
 
 # Returns model list from boards.txt in specified directory
 def get_boards_from_directory(fileloc,prefix):
@@ -251,6 +244,12 @@ class ModelData(object):
 		def append(self, item):
 			self.items.append(item)
 			self.empty = False
+
+		def get_first(self):
+			if len(self.items) > 0:
+				return self.items[0]
+			else:
+				return None
 
 		def __str__(self):
 			return "'ModelData with Label: {} and Items: {}'".format(self.label,self.items)

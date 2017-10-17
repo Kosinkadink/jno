@@ -9,15 +9,20 @@ class Init(Command):
 		self.init_jno(location)
 
 	def init_jno(self,jno_dir):
-		lib_dir = os.path.join(jno_dir,'lib')
+		lib_dir = os.path.join(jno_dir,'libraries')
+		lib_dir_old = os.path.join(jno_dir,'lib')
 		sketch_dir = os.path.join(jno_dir,'sketch')
 		jno_file = os.path.join(jno_dir,'jno.jno')
 		# create lib if does not exist
 		if not os.path.exists(lib_dir):
-			os.mkdir(lib_dir)
-			# create putlibrarieshere.txt file, useful when using with git so directory gets committed
-			with open(os.path.join(lib_dir,"putlibrarieshere.txt"),"wb") as libfile:
-				pass
+			# check if we need to rename
+			if os.path.isdir(lib_dir_old):
+				os.rename(lib_dir_old, lib_dir)
+			else:
+				os.mkdir(lib_dir)
+				# create putlibrarieshere.txt file, useful when using with git so directory gets committed
+				with open(os.path.join(lib_dir,"putlibrarieshere.txt"),"wb") as libfile:
+					pass
 
 		# create sketch if does not exist
 		if not os.path.exists(sketch_dir):
@@ -31,7 +36,6 @@ class Init(Command):
 		if not os.path.exists(jno_file):
 			with open(jno_file,'wb') as jno:
 				jno.write("EXEC_DIR==NULL\n")
-				jno.write("EXEC_LIBS==DEFAULT\n")
 				jno.write("BOARD==uno\n")
 				jno.write("BAUDRATE==9600\n")
 				jno.write("PORT==DEFAULT\n")
