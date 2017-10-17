@@ -34,8 +34,11 @@ def interpret_configs(__location__):
 	# if not absolute directory, make it local
 	elif not jno_dict["SKETCH_DIR"].startswith('/'):
 		jno_dict["SKETCH_DIR"] = os.path.join(os.getcwd(),jno_dict["SKETCH_DIR"])
-	# create EXEC_SCRIPT
-	jno_dict["EXEC_SCRIPT"] = os.path.join(jno_dict["EXEC_DIR"],'arduino')
+	# create EXEC_SCRIPT; if on Windows, uses the better executable
+	if os.name == 'nt':
+		jno_dict["EXEC_SCRIPT"] = os.path.join(jno_dict["EXEC_DIR"],'arduino_debug')
+	else:
+		jno_dict["EXEC_SCRIPT"] = os.path.join(jno_dict["EXEC_DIR"],"arduino")
 	# create SKETCH_INO
 	jno_dict["SKETCH_INO"] = os.path.join(jno_dict["SKETCH_DIR"],'sketch/sketch.ino')
 	# create SKETCH_LIBS
