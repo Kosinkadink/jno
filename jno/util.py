@@ -2,6 +2,7 @@ import os
 import re
 import shutil
 import subprocess
+from sys import platform
 from shutil import rmtree
 from collections import OrderedDict, namedtuple
 from colorama import Fore
@@ -25,9 +26,18 @@ class JnoException(Exception):
 # Replaces temporary dictionary values with actual values
 def interpret_configs(__location__):
 	jno_dict = read_configs(__location__)
-	# check if EXEC_DIR exists
+	# based on operating system, try to use a default location if no EXEC_DIR is set
 	if jno_dict["EXEC_DIR"] in ('NULL','DEFAULT'):
-		raise JnoException("EXEC_DIR has not been initialized")
+		if os.name == 'nt': # running on Windows
+			if os.path.isdir("C:/Program Files (x86)/Arduino"):
+				jno_dict["EXEC_DIR"] = "C:/Program Files (x86)/Arduino"
+		elif platform == "darwin": # running on OS X
+			if os.path.isdir("/Applications/Arduino.app"):
+				jno_dict["EXEC_DIR"] = "/Applications/Arduino.app"
+		# otherwise, if still don't have a value, raise exception
+		if jno_dict["EXEC_DIR"] in ('NULL','DEFAULT'):
+			raise JnoException("EXEC_DIR has not been initialized (use jno setglobal --EXEC_DIR=[Installed Arduino Directory])")
+		
 	# perform necessary additions/replacements
 	if jno_dict["SKETCH_DIR"] == 'DEFAULT':
 		jno_dict["SKETCH_DIR"] = os.getcwd()
@@ -37,13 +47,15 @@ def interpret_configs(__location__):
 	# create EXEC_SCRIPT; if on Windows, uses the better executable
 	if os.name == 'nt':
 		jno_dict["EXEC_SCRIPT"] = os.path.join(jno_dict["EXEC_DIR"],'arduino_debug')
+	elif platform == "darwin": # if on OS X, use proper executable directory
+		jno_dict["EXEC_SCRIPT"] = os.path.join(jno_dict["EXEC_DIR"],"Contents/MacOS/Arduino")
 	else:
 		jno_dict["EXEC_SCRIPT"] = os.path.join(jno_dict["EXEC_DIR"],"arduino")
 	# create SKETCH_INO
 	jno_dict["SKETCH_INO"] = os.path.join(jno_dict["SKETCH_DIR"],'sketch/sketch.ino')
 	# create SKETCH_LIBS
 	jno_dict["SKETCH_LIBS"] = os.path.join(jno_dict["SKETCH_DIR"],'libraries')
-
+	
 	return jno_dict
 
 
@@ -53,6 +65,7 @@ def read_configs(__location__):
 	jno_dict = parse_jno_file(jno_dict,__location__)
 	if os.path.exists(os.path.join(os.getcwd(),'jno.jno')):
 		jno_dict = parse_jno_file(jno_dict,os.getcwd())
+
 	return jno_dict
 
 
@@ -147,7 +160,10 @@ def get_all_models(jno_dict):
 	# directores to ignore
 	ignore_dirs = ["tools"]
 	# get hardware directory
-	arduino_hardware_dir = os.path.join(jno_dict["EXEC_DIR"],"hardware")
+	if platform == "darwin": # if running on a OS X
+		arduino_hardware_dir = os.path.join(jno_dict["EXEC_DIR"],"Contents/Java/hardware")
+	else: # running on all other platforms
+		arduino_hardware_dir = os.path.join(jno_dict["EXEC_DIR"],"hardware")
 	# used to store all models
 	all_models = []
 	# do a walk

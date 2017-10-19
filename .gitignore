@@ -4,3 +4,4 @@ sketch
 build
 *.egg-info
 dist
+.DS_Store
