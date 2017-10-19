@@ -2,6 +2,7 @@ import os
 import re
 import shutil
 import subprocess
+from sys import platform
 from shutil import rmtree
 from collections import OrderedDict, namedtuple
 from colorama import Fore
@@ -53,6 +54,15 @@ def read_configs(__location__):
 	jno_dict = parse_jno_file(jno_dict,__location__)
 	if os.path.exists(os.path.join(os.getcwd(),'jno.jno')):
 		jno_dict = parse_jno_file(jno_dict,os.getcwd())
+	# based on operating system, try to use a default location if no EXEC_DIR is set
+	if jno_dict["EXEC_DIR"] in ('NULL','DEFAULT'):
+		if os.name == 'nt': # running on Windows
+			if os.path.isdir("C:/Program Files (x86)/Arduino"):
+				jno_dict["EXEC_DIR"] = "C:/Program Files (x86)/Arduino"
+		elif platform == "darwin": # running on OS X
+			if os.path.isdir("/Applications/Arduino.app"):
+				jno_dict["EXEC_DIR"] = "/Applications/Arduino.app/Contents/MacOS"
+
 	return jno_dict
 
 
@@ -147,7 +157,10 @@ def get_all_models(jno_dict):
 	# directores to ignore
 	ignore_dirs = ["tools"]
 	# get hardware directory
-	arduino_hardware_dir = os.path.join(jno_dict["EXEC_DIR"],"hardware")
+	if platform == "darwin": # if running on a OS X
+		arduino_hardware_dir = os.path.join(jno_dict["EXEC_DIR"],"../Java/hardware")
+	else: # running on all other platforms
+		arduino_hardware_dir = os.path.join(jno_dict["EXEC_DIR"],"hardware")
 	# used to store all models
 	all_models = []
 	# do a walk
