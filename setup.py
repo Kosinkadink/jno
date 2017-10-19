@@ -8,7 +8,7 @@ readme_contents = open("README.md").read()
 
 jno_data = ['jno.jno']
 
-jno_version = '0.4.0'
+jno_version = '0.4.1-dev0'
 
 #input into setup
 setup(
