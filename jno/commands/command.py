@@ -1,4 +1,3 @@
-#!/usr/bin/python2
 from jno.util import get_all_models
 from jno.util import JnoException
 from colorama import Fore

@@ -1,4 +1,3 @@
-
 from jno.commands.command import Command
 
 import os
@@ -9,10 +8,10 @@ class Init(Command):
 		self.init_jno(location)
 
 	def init_jno(self,jno_dir):
-		lib_dir = os.path.join(jno_dir,'libraries')
-		lib_dir_old = os.path.join(jno_dir,'lib')
-		sketch_dir = os.path.join(jno_dir,'sketch')
-		jno_file = os.path.join(jno_dir,'jno.jno')
+		lib_dir = os.path.join(jno_dir,"libraries")
+		lib_dir_old = os.path.join(jno_dir,"lib")
+		sketch_dir = os.path.join(jno_dir,"sketch")
+		jno_file = os.path.join(jno_dir,"jno.jno")
 		# create lib if does not exist
 		if not os.path.exists(lib_dir):
 			# check if we need to rename
@@ -28,13 +27,13 @@ class Init(Command):
 		if not os.path.exists(sketch_dir):
 			os.mkdir(sketch_dir)
 			# create sketch.ino in sketch dir with setup/loop functions
-			with open(os.path.join(sketch_dir,"sketch.ino"),"wb") as sketchfile:
+			with open(os.path.join(sketch_dir,"sketch.ino"),"w") as sketchfile:
 				sketchfile.write("void setup() {\n\n}\n")
 				sketchfile.write("void loop() {\n\n}\n")
 
 		# create jno.jno 
 		if not os.path.exists(jno_file):
-			with open(jno_file,'wb') as jno:
+			with open(jno_file,'w') as jno:
 				jno.write("EXEC_DIR==NULL\n")
 				jno.write("BOARD==uno\n")
 				jno.write("BAUDRATE==9600\n")

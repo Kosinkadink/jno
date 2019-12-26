@@ -20,9 +20,9 @@ class JnoSerial(Command):
 	# Parse arguments passed into JnoSerial
 	def parse_serial_args(self,argv,jno_dict):
 		try:
-			opts,args = getopt.getopt(argv, 'p:b:',['port=','baud='])
+			opts,args = getopt.getopt(argv, "p:b:",["port=","baud="])
 		except getopt.GetoptError:
-			print(Fore.RED + 'invalid arguments' + Fore.RESET)
+			print(Fore.RED + "invalid arguments" + Fore.RESET)
 			quit()
 		for opt, arg in opts:
 			if opt in ("-p","--port"):
@@ -54,11 +54,11 @@ class JnoSerial(Command):
 			ard_serial.close()
 			ard_serial.open()
 
-		print(Fore.CYAN + ':: successfully started serial')
-		print(':: port: {1}{0}{2}'.format(PORT,Fore.YELLOW,Fore.CYAN))
-		print(':: baudrate: {1}{0}{2}'.format(BAUD,Fore.YELLOW,Fore.CYAN))
-		print(':: type {0}EXIT{1} to leave serial'.format(Fore.YELLOW,Fore.CYAN))
-		print('' + Fore.RESET)
+		print(Fore.CYAN + ":: successfully started serial")
+		print(":: port: {1}{0}{2}".format(PORT,Fore.YELLOW,Fore.CYAN))
+		print(":: baudrate: {1}{0}{2}".format(BAUD,Fore.YELLOW,Fore.CYAN))
+		print(":: type {0}EXIT{1} to leave serial".format(Fore.YELLOW,Fore.CYAN))
+		print("" + Fore.RESET)
 		# create thread for receiving serial stuff
 		ser_event = threading.Event()
 		ser_message_sent = threading.Event()

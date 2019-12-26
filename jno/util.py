@@ -306,7 +306,7 @@ class Model(object):
 		self.empty = False
 
 	def __str__(self):
-		return "'Model with board: {}, board_name: {}, and item dict: {}".format(self.board,self.board_name,self.menu_item_dict)
+		return "Model with board: {}, board_name: {}, and item dict: {}".format(self.board,self.board_name,self.menu_item_dict)
 
 	def __repr__(self):
 		return str(self)
