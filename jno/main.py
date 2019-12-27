@@ -11,6 +11,9 @@ from jno.commands.build import Build
 from jno.commands.upload import Upload
 from jno.commands.listmodels import ListModels
 from jno.commands.clean import Clean
+from jno.util import create_global_settings
+from jno.util import global_file_name
+from jno.util import get_home_directory
 from jno.util import JnoException
 
 # directory from which this script is ran
@@ -28,25 +31,25 @@ def init_command(argv):
 	Init(argv,os.getcwd())
 
 def build_command(argv):
-	Build(argv,__location__)
+	Build(argv,get_home_directory())
 
 def upload_command(argv):
-	Upload(argv,__location__)
+	Upload(argv,get_home_directory())
 
 def serial_command(argv):
-	JnoSerial(argv,__location__)
+	JnoSerial(argv,get_home_directory())
 
 def setglobal_command(argv):
-	SetDefault(argv,__location__)
+	SetDefault(argv,get_home_directory(),global_file_name)
 
 def setlocal_command(argv):
 	SetDefault(argv,os.getcwd())
 
 def listmodels_command(argv):
-	ListModels(argv,__location__)
+	ListModels(argv,get_home_directory())
 
 def clean_command(argv):
-	Clean(argv,__location__)
+	Clean(argv,get_home_directory())
 
 
 # Dictionary linking option to function
@@ -74,6 +77,7 @@ def main():
 			print(Fore.RED + "ERROR: Command " + Fore.YELLOW + command + Fore.RED + " not found" + Fore.RESET)
 		else:
 			try:
+				create_global_settings()
 				jno_function(args)
 			except JnoException as e:
 				print(Fore.RED + "ERROR: {}".format(str(e)) + Fore.RESET)
