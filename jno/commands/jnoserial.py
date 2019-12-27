@@ -44,11 +44,9 @@ class JnoSerial(Command):
 			BAUD = int(jno_dict["baudrate"])
 			ard_serial = serial.Serial(PORT, BAUD)
 		except ValueError as e:
-			print(Fore.RED + str(e) + Fore.RESET)
-			return
+			raise JnoException(str(e))
 		except Exception as e:
-			print(Fore.RED + str(e) + Fore.RESET)
-			return
+			raise JnoException(str(e))
 			
 		if ard_serial.isOpen():
 			ard_serial.close()

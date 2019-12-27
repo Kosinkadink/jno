@@ -45,6 +45,6 @@ class Upload(Command):
 		arg_list.append(self.formatBoard(jno_dict["board"],jno_dict))
 		# add port params
 		arg_list.append("--port")
-		arg_list.append(jno_dict["PORT"])
+		arg_list.append(jno_dict["port"])
 
 		return arg_list
