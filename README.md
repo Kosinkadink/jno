@@ -46,7 +46,7 @@ The commands supported are:
 
 *jno clean*: removes all build files (located in .build of directory)
 
-*jno listmodels [optional parameters]*: list the board models supported by your Arduino IDE
+*jno boards [optional parameters]*: list the board models supported by your Arduino IDE
 
 *jno setlocal [setting]*: change setting in local *jno.jno*
 
@@ -57,7 +57,7 @@ These settings are the same as those contained in *jno.jno* files. These setting
 
 *--exec_dir=/some/dir*: directory that contains the arduino executable file. NULL is the default value.
 
-*--board=boardname*: board that code should be compiled for. Possible 'boardname' choices include *uno* and *mega*. For boardname options, use the *listmodels* command.
+*--board=boardname*: board that code should be compiled for. Possible 'boardname' choices include *uno* and *mega*. For boardname options, use the *boards* command.
 
 *--port=/some/port*: port of arduino to upload code or start serial communication. On Linux, dmesg is useful in determining this.
 
@@ -72,7 +72,7 @@ Parameters are used only for the current invocation of the command and override 
 
 *-p, --port=/some/port*: see --port above. Affects the upload and serial commands.
 
-*--board=boardname*: see --board above. Affects the build, upload, and listmodels commands.
+*--board=boardname*: see --board above. Affects the build, upload, and boards commands.
 
 # jno Directory Structure
 

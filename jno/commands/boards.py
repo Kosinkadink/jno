@@ -6,7 +6,7 @@ from sys import version_info
 import getopt
 from colorama import Fore
 
-class ListModels(Command):
+class Boards(Command):
 
 	def run(self,argv,__location__):
 		jno_dict = interpret_configs()

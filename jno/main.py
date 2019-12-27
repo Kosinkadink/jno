@@ -9,7 +9,8 @@ from jno.commands.init import Init
 from jno.commands.jnoserial import JnoSerial
 from jno.commands.build import Build
 from jno.commands.upload import Upload
-from jno.commands.listmodels import ListModels
+from jno.commands.boards import Boards
+from jno.commands.ports import Ports
 from jno.commands.clean import Clean
 from jno.util import create_global_settings
 from jno.util import global_file_name
@@ -45,8 +46,11 @@ def setglobal_command(argv):
 def setlocal_command(argv):
 	SetDefault(argv,os.getcwd())
 
-def listmodels_command(argv):
-	ListModels(argv,get_home_directory())
+def boards_command(argv):
+	Boards(argv,get_home_directory())
+
+def ports_command(argv):
+	Ports(argv,get_home_directory())
 
 def clean_command(argv):
 	Clean(argv,get_home_directory())
@@ -60,7 +64,8 @@ command_dict = {
 	"serial": serial_command,
 	"setglobal": setglobal_command,
 	"setlocal": setlocal_command,
-	"listmodels": listmodels_command,
+	"boards": boards_command,
+	"ports": ports_command,
 	"clean": clean_command
 }
 
