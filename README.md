@@ -21,17 +21,17 @@ To begin using jno, change working directory to your project. Then, perform:
 
 This will initialize the basic directory structure and create a *jno.jno* file, which stores the local jno settings.
 
-By default, jno does not know where your Arduino IDE is located - this is represented by EXEC_DIR in the config. There is a local and a global version of *jno.jno* files. The local *jno.jno* file overwrites the global version IF the parameters are not set to NULL or DEFAULT. To set up your EXEC_DIR, find your Arduino folder - say /home/pi/Documents/arduino-1.8.1. Perform:
+By default, jno does not know where your Arduino IDE is located - this is represented by exec_dir in the config. There is a local and a global version of *jno.jno* files. The local *jno.jno* file overwrites the global version IF the parameters are not set to NULL or DEFAULT. To set up your exec_dir, find your Arduino folder - say /home/pi/Documents/arduino-1.8.10. Perform:
 
-	jno setglobal --EXEC_DIR=/home/pi/Documents/arduino-1.8.1
+	jno setglobal --exec_dir=/home/pi/Documents/arduino-1.8.10
 	
 OR
 
-	jno setlocal --EXEC_DIR=/home/pi/Documents/arduino-1.8.1
+	jno setlocal --exec_dir=/home/pi/Documents/arduino-1.8.10
 
-depending on what you plan on doing - setglobal means a local .jno with EXEC_DIR set to NULL will use the global EXEC_DIR instead.
+depending on what you plan on doing - setglobal means a local .jno with exec_dir set to NULL will use the global exec_dir instead.
 
-Once EXEC_DIR is set, jno is ready to go. You should change the global and local settings to your liking - the options are documented below.
+Once exec_dir is set, jno is ready to go. You should change the global and local settings to your liking - the options are documented below.
 
 # Usage
 The commands supported are:
@@ -55,7 +55,7 @@ The commands supported are:
 ## Settings (for setlocal and setglobal)
 These settings are the same as those contained in *jno.jno* files. These settings WILL be saved locally or globally. Note that lower case inputs are equally as valid. Possible parameters are as follows:
 
-*--EXEC_DIR=/some/dir*: directory that contains the arduino executable file. NULL is the default value.
+*--exec_dir=/some/dir*: directory that contains the arduino executable file. NULL is the default value.
 
 *--BOARD=boardname*: board that code should be compiled for. Possible 'boardname' choices include *uno* and *mega*. For boardname options, use the *listmodels* command.
 
