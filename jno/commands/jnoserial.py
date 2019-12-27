@@ -1,4 +1,5 @@
 from jno.util import interpret_configs
+from jno.util import JnoException
 from jno.commands.command import Command
 
 import getopt
@@ -12,7 +13,7 @@ from colorama import Fore
 class JnoSerial(Command):
 
 	def run(self,argv,__location__):
-		jno_dict = interpret_configs(__location__)
+		jno_dict = interpret_configs()
 		jno_dict = self.parse_serial_args(argv[1:],jno_dict)
 		self.start_serialcomm(jno_dict)
 
@@ -20,28 +21,27 @@ class JnoSerial(Command):
 	# Parse arguments passed into JnoSerial
 	def parse_serial_args(self,argv,jno_dict):
 		try:
-			opts,args = getopt.getopt(argv, "p:b:",["port=","baud="])
-		except getopt.GetoptError:
-			print(Fore.RED + "invalid arguments" + Fore.RESET)
-			quit()
+			opts,args = getopt.getopt(argv, "p:b:",["port=","baudrate="])
+		except getopt.GetoptError as e:
+			raise JnoException(str(e))
 		for opt, arg in opts:
 			if opt in ("-p","--port"):
 				if arg.strip() == "":
 					raise ValueError("no port provided")
-				jno_dict["PORT"] = arg
-			elif opt in ("-b","--baud"):
+				jno_dict["port"] = arg
+			elif opt in ("-b","--baudrate"):
 				if arg.strip() == "":
 					raise ValueError("no baudrate provided")
-				jno_dict["BAUDRATE"] = arg
+				jno_dict["baudrate"] = arg
 		return jno_dict
 
 
 	# Open serial communication with arduino
 	def start_serialcomm(self,jno_dict):
-		PORT = jno_dict["PORT"]
+		PORT = jno_dict["port"]
 		
 		try:
-			BAUD = int(jno_dict["BAUDRATE"])
+			BAUD = int(jno_dict["baudrate"])
 			ard_serial = serial.Serial(PORT, BAUD)
 		except ValueError as e:
 			print(Fore.RED + str(e) + Fore.RESET)

@@ -1,4 +1,5 @@
 from jno.commands.command import Command
+from jno.util import create_default_jno_file
 
 import os
 
@@ -11,7 +12,7 @@ class Init(Command):
 		lib_dir = os.path.join(jno_dir,"libraries")
 		lib_dir_old = os.path.join(jno_dir,"lib")
 		sketch_dir = os.path.join(jno_dir,"sketch")
-		jno_file = os.path.join(jno_dir,"jno.jno")
+		jno_file_name = "jno.jno"
 		# create lib if does not exist
 		if not os.path.exists(lib_dir):
 			# check if we need to rename
@@ -32,11 +33,6 @@ class Init(Command):
 				sketchfile.write("void loop() {\n\n}\n")
 
 		# create jno.jno 
-		if not os.path.exists(jno_file):
-			with open(jno_file,'w') as jno:
-				jno.write("EXEC_DIR==NULL\n")
-				jno.write("BOARD==uno\n")
-				jno.write("BAUDRATE==9600\n")
-				jno.write("PORT==DEFAULT\n")
-				jno.write("SKETCH_DIR==DEFAULT\n")
+		if not os.path.exists(os.path.join(jno_dir,jno_file_name)):
+			create_default_jno_file(jno_dir,jno_file_name)
 		print('directories and .jno initialized')

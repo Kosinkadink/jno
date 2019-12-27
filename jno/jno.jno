@@ -1,5 +1,0 @@
-BAUDRATE==9600
-EXEC_DIR==/home/ubuntu18/Documents/arduino-1.8.10
-PORT==DEFAULT
-SKETCH_DIR==DEFAULT
-BOARD==uno

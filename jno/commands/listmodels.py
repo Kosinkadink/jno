@@ -9,19 +9,19 @@ from colorama import Fore
 class ListModels(Command):
 
 	def run(self,argv,__location__):
-		jno_dict = interpret_configs(__location__)
+		jno_dict = interpret_configs()
 		models = get_all_models(jno_dict)
 		self.perform_listmodels(argv[1:],models)
 
 	def perform_listmodels(self,argv,models):
 		is_board_provided = False
 		try:
-			opts,args = getopt.getopt(argv, '', ['board='])
-		except getopt.GetoptError:
-			raise JnoException("invalid arguments")
+			opts,args = getopt.getopt(argv, 'b:', ['board='])
+		except getopt.GetoptError as e:
+			raise JnoException(str(e))
 		# if a board is provided, show info about it
 		for opt, arg in opts:
-			if opt in ("--board"):
+			if opt in ("-b","--board"):
 				is_board_provided = True
 				self.printDataAboutModel(arg,models)
 		# otherwise, list all models
