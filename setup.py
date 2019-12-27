@@ -1,4 +1,3 @@
-#!/user/bin/env python
 from setuptools import setup
 
 #install requirements provided by requirements.txt
@@ -6,7 +5,7 @@ install_requirements = open("requirements.txt").read().split('\n')
 #readme from repo
 readme_contents = open("README.md").read()
 
-jno_data = ['jno.jno']
+jno_data = []
 
 jno_version = '0.4.1-dev0'
 
