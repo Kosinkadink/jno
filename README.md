@@ -46,7 +46,7 @@ The commands supported are:
 
 *jno clean*: removes all build files (located in .build of directory)
 
-*jno listmodels*: list the board models supported by your Arduino IDE
+*jno listmodels [optional parameters]*: list the board models supported by your Arduino IDE
 
 *jno setlocal [setting]*: change setting in local *jno.jno*
 
@@ -55,24 +55,24 @@ The commands supported are:
 ## Settings (for setlocal and setglobal)
 These settings are the same as those contained in *jno.jno* files. These settings WILL be saved locally or globally. Note that lower case inputs are equally as valid. Possible parameters are as follows:
 
-*--EXEC_DIR=/some/dir*: directory that contains the arduino executable file. NULL is the default value.
+*--exec_dir=/some/dir*: directory that contains the arduino executable file. NULL is the default value.
 
-*--BOARD=boardname*: board that code should be compiled for. Possible 'boardname' choices include *uno* and *mega*. For boardname options, use the *listmodels* command.
+*--board=boardname*: board that code should be compiled for. Possible 'boardname' choices include *uno* and *mega*. For boardname options, use the *listmodels* command.
 
-*--PORT=/some/port*: port of arduino to upload code or start serial communication. On Linux, dmesg is useful in determining this.
+*--port=/some/port*: port of arduino to upload code or start serial communication. On Linux, dmesg is useful in determining this.
 
-*--BAUDRATE=9600*: baudrate used for serial communication. Must be an integer.
+*--baudrate=9600*: baudrate used for serial communication. Must be an integer.
 
-*--SKETCH_DIR=/some/dir*: directory of the local jno 'home'. Only mess with this if this *jno.jno* is meant to point to a deeper directory.
+*--sketch_dir=/some/dir*: directory of the local jno 'home'. Only mess with this if this *jno.jno* is meant to point to a deeper directory.
 
 ## Parameters (for other commands)
 Parameters are used only for the current invocation of the command and override local settings - they WILL NOT be saved. Possible settings are:
 
-*-b, --baud=9600*: see --BAUDRATE above. Only affects serial command.
+*-b, --baudrate=9600*: see --baudrate above. Only affects serial command.
 
-*-p, --port=/some/port*: see --PORT above. Affects the upload and serial commands.
+*-p, --port=/some/port*: see --port above. Affects the upload and serial commands.
 
-*--board=boardname*: see --BOARD above. Affects the build, upload, and listmodels commands.
+*--board=boardname*: see --board above. Affects the build, upload, and listmodels commands.
 
 # jno Directory Structure
 
