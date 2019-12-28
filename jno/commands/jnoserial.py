@@ -6,6 +6,7 @@ import getopt
 import serial
 import threading
 import sys
+from sys import version_info
 from colorama import Fore
 
 
@@ -65,7 +66,10 @@ class JnoSerial(Command):
 		ser_thread.start()
 		# echo user input to the serial device
 		while True:
-			user_inp = raw_input()
+			if version_info < (3,0): # python2 code
+				user_inp = raw_input()
+			else: # python3 code
+				user_inp = input()
 			ser_message_sent.set()
 			if user_inp.strip() == "EXIT":
 				break
