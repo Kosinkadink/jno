@@ -8,6 +8,7 @@ from jno.util import JnoException
 from jno.commands.command import Command
 
 import getopt
+from colorama import Fore
 
 class Upload(Command):
 
@@ -48,7 +49,7 @@ class Upload(Command):
 			raise JnoException("port does not exist: {}".format(jno_dict["port"]))
 		else:
 			if jno_dict["port"] == "DEFAULT":
-				print("No port provided, using {} by default".format(port))
+				print("{1}No port provided, using available port {0}{2}".format(port,Fore.YELLOW,Fore.RESET))
 
 		# add board params
 		arg_list.append("--board")
