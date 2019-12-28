@@ -2,8 +2,9 @@ from jno.util import interpret_configs
 from jno.util import run_arduino_process
 from jno.util import create_build_directory
 from jno.util import get_common_parameters
-from jno.util import JnoException
 from jno.util import verify_arduino_dir
+from jno.util import verify_and_get_port
+from jno.util import JnoException
 from jno.commands.command import Command
 
 import getopt
@@ -39,12 +40,21 @@ class Upload(Command):
 				jno_dict["port"] = arg.strip()
 			elif opt in ("-v","--verbose"):
 				arg_list.append("--verbose")
+		# verify port or get first available
+		port = verify_and_get_port(jno_dict["port"])
+		if not port:
+			if jno_dict["port"] == "DEFAULT":
+				raise JnoException("no ports available")
+			raise JnoException("port does not exist: {}".format(jno_dict["port"]))
+		else:
+			if jno_dict["port"] == "DEFAULT":
+				print("No port provided, using {} by default".format(port))
 
 		# add board params
 		arg_list.append("--board")
 		arg_list.append(self.formatBoard(jno_dict["board"],jno_dict))
 		# add port params
 		arg_list.append("--port")
-		arg_list.append(jno_dict["port"])
+		arg_list.append(port)
 
 		return arg_list

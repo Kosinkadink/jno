@@ -1,4 +1,5 @@
 import os
+import sys
 import re
 import shutil
 import subprocess
@@ -135,13 +136,20 @@ def clean_directory(dir_to_clean):
 	return True 
 
 
-# Run arduino with an assembled argument list
+# Run arduino with an assembled argument list stdout=subprocess.PIPE, 
 def run_arduino_process(arg_list):
 	try:
-		returned = subprocess.check_call(arg_list)
+		call = subprocess.Popen(arg_list, stderr=subprocess.PIPE, universal_newlines=True)
+		for line in call.stderr:
+			if line.startswith("TRACE") or line.startswith("DEBUG") or line.startswith("INFO"):
+				pass
+			else:
+				sys.stdout.write(Fore.RED+line+Fore.RESET)
+		# wait until call is finished
+		call.communicate()[0]
 	except subprocess.CalledProcessError as e:
 		returned = e.returncode
-	print(Fore.YELLOW + 'All Actions Complete: {}'.format(return_code_qualifier(returned)) + Fore.RESET)
+	print(Fore.YELLOW + 'All Actions Complete: {}'.format(return_code_qualifier(call.returncode)) + Fore.RESET)
 
 
 # Returns meaning of return code
@@ -192,6 +200,25 @@ def get_all_ports():
 	if list_ports_supported:
 		return serial.tools.list_ports.comports()
 	print("port listing is not supported with current version of pyserial")
+	return None
+
+# Get first port name
+def get_first_port_name():
+	ports = get_all_ports()
+	if ports:
+		return ports[0].device
+	return None
+
+# Check if port exists; if default, use first available port
+def verify_and_get_port(port_name,use_first=True):
+	if port_name == "DEFAULT":
+		if use_first:
+			return get_first_port_name()
+		return None
+	ports = get_all_ports()
+	for port in ports:
+		if port.device == port_name:
+			return port_name
 	return None
 
 # Get and print list of all supported models

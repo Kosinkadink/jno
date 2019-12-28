@@ -1,4 +1,5 @@
 from jno.util import interpret_configs
+from jno.util import verify_and_get_port
 from jno.util import JnoException
 from jno.commands.command import Command
 
@@ -47,7 +48,13 @@ class JnoSerial(Command):
 
 	# Open serial communication with arduino
 	def start_serialcomm(self,jno_dict):
-		PORT = jno_dict["port"]
+		# verify port or get first available
+		port = verify_and_get_port(jno_dict["port"])
+		if not port:
+			if jno_dict["port"] == "DEFAULT":
+				raise JnoException("no ports available")
+			raise JnoException("port does not exist: {}".format(jno_dict["port"]))
+
 		if "QUIT" not in jno_dict:
 			jno_dict["QUIT"] = "EXIT"
 		if "ENDLINE" not in jno_dict:
@@ -65,8 +72,8 @@ class JnoSerial(Command):
 			jno_dict["ENDLINE"] = endline_str
 
 		try:
-			BAUD = int(jno_dict["baudrate"])
-			ard_serial = serial.Serial(PORT, BAUD)
+			baud = int(jno_dict["baudrate"])
+			ard_serial = serial.Serial(port, baud)
 		except ValueError as e:
 			raise JnoException(str(e))
 		except Exception as e:
@@ -77,8 +84,8 @@ class JnoSerial(Command):
 			ard_serial.open()
 
 		print(Fore.CYAN + ":: successfully started serial")
-		print(":: port: {1}{0}{2}".format(PORT,Fore.YELLOW,Fore.CYAN))
-		print(":: baudrate: {1}{0}{2}".format(BAUD,Fore.YELLOW,Fore.CYAN))
+		print(":: port: {1}{0}{2}".format(port,Fore.YELLOW,Fore.CYAN))
+		print(":: baudrate: {1}{0}{2}".format(baud,Fore.YELLOW,Fore.CYAN))
 		print(":: endline: {1}{0}{2}".format(endline_print,Fore.YELLOW,Fore.CYAN))
 		print(":: type {1}{0}{2} to leave serial".format(jno_dict["QUIT"],Fore.YELLOW,Fore.CYAN))
 		print("" + Fore.RESET)
