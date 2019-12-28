@@ -2,6 +2,12 @@ import os
 import re
 import shutil
 import subprocess
+try:
+	import serial.tools.list_ports
+except ImportError:
+	list_ports_supported = False
+else:
+	list_ports_supported = True
 from sys import platform
 from shutil import rmtree
 from collections import OrderedDict, namedtuple
@@ -180,6 +186,13 @@ def get_common_parameters(jno_dict):
 		argument_list.append(pref_string)
 	# return arguments
 	return argument_list
+
+# Get all ports to connected devices
+def get_all_ports():
+	if list_ports_supported:
+		return serial.tools.list_ports.comports()
+	print("port listing is not supported with current version of pyserial")
+	return None
 
 # Get and print list of all supported models
 def get_all_models(jno_dict):

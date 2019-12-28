@@ -14,7 +14,7 @@ class JnoSerial(Command):
 
 	def run(self,argv,__location__):
 		jno_dict = interpret_configs()
-		jno_dict = self.parse_serial_args(argv[1:],jno_dict)
+		jno_dict = self.parse_serial_args(argv,jno_dict)
 		self.start_serialcomm(jno_dict)
 
 

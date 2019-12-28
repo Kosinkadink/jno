@@ -23,7 +23,7 @@ class SetDefault(Command):
 			opt_arg_list.append(opt_arg_list[n].lower())
 
 		try:
-			opts,args = getopt.getopt(argv[1:],'',opt_arg_list)
+			opts,args = getopt.getopt(argv,'',opt_arg_list)
 		except getopt.GetoptError as e:
 			raise JnoException(str(e))
 		

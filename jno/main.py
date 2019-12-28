@@ -1,4 +1,3 @@
-#!/usr/bin/python2
 import sys
 import os
 from colorama import init, Fore
@@ -17,11 +16,7 @@ from jno.util import global_file_name
 from jno.util import get_home_directory
 from jno.util import JnoException
 
-# directory from which this script is ran
-__location__ = os.path.realpath(
-	os.path.join(os.getcwd(), os.path.dirname(__file__)))
 if os.name == 'nt':
-	__location__ = __location__.replace('\\','/')
 	init()
 
 
@@ -71,7 +66,7 @@ command_dict = {
 
 
 def main():
-	args = sys.argv[1:]
+	args = sys.argv[1:]  # skip call to jno from args list
 	if len(args) == 0:
 		print(Fore.RED + "No commands given" + Fore.RESET)
 	else:
@@ -83,7 +78,7 @@ def main():
 		else:
 			try:
 				create_global_settings()
-				jno_function(args)
+				jno_function(args[1:])  # skip command name from args list
 			except JnoException as e:
 				print(Fore.RED + "ERROR: {}".format(str(e)) + Fore.RESET)
 

@@ -14,7 +14,7 @@ class Upload(Command):
 		jno_dict = interpret_configs()
 		verify_arduino_dir(jno_dict)
 		create_build_directory(jno_dict)
-		arg_list = self.perform_upload(argv[1:],jno_dict)
+		arg_list = self.perform_upload(argv,jno_dict)
 		run_arduino_process(arg_list)
 
 	# Create argument list for arduino build 
@@ -29,15 +29,15 @@ class Upload(Command):
 		arg_list.append(jno_dict["SKETCH_INO"])
 	
 		try:
-			opts,args = getopt.getopt(argv, 'p:',['board=','port=','verbose'])
+			opts,args = getopt.getopt(argv, 'b:p:v',['board=','port=','verbose'])
 		except getopt.GetoptError as e:
 			raise JnoException(str(e))
 		for opt, arg in opts:
-			if opt in ("--board"):
+			if opt in ("-b","--board"):
 				jno_dict["board"] = arg.strip()
 			elif opt in ("-p","--port"):
 				jno_dict["port"] = arg.strip()
-			elif opt in ("--verbose"):
+			elif opt in ("-v","--verbose"):
 				arg_list.append("--verbose")
 
 		# add board params
