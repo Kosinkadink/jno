@@ -54,6 +54,9 @@ class JnoSerial(Command):
 			if jno_dict["port"] == "DEFAULT":
 				raise JnoException("no ports available")
 			raise JnoException("port does not exist: {}".format(jno_dict["port"]))
+		else:
+			if jno_dict["port"] == "DEFAULT":
+				print("No port provided, using {} by default".format(port))
 
 		if "QUIT" not in jno_dict:
 			jno_dict["QUIT"] = "EXIT"
