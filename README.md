@@ -31,7 +31,7 @@ OR
 
 depending on what you plan on doing - setglobal means a local .jno with exec_dir set to NULL will use the global exec_dir instead.
 
-Once exec_dir is set, jno is ready to go. You should change the global and local settings to your liking - the options are documented below.
+Once exec_dir is set, jno is ready to go. You should change the global and local settings to your liking - the options are documented below. Global settings are stored in the local user's home folder in a *.jnoglobal.jno* file.
 
 # Usage
 The commands supported are:
@@ -46,7 +46,9 @@ The commands supported are:
 
 *jno clean*: removes all build files (located in .build of directory)
 
-*jno listmodels [optional parameters]*: list the board models supported by your Arduino IDE
+*jno boards [optional parameters]*: list the board models supported by your Arduino IDE
+
+*jno ports [optional parameters]*: list the ports currently available
 
 *jno setlocal [setting]*: change setting in local *jno.jno*
 
@@ -57,7 +59,7 @@ These settings are the same as those contained in *jno.jno* files. These setting
 
 *--exec_dir=/some/dir*: directory that contains the arduino executable file. NULL is the default value.
 
-*--board=boardname*: board that code should be compiled for. Possible 'boardname' choices include *uno* and *mega*. For boardname options, use the *listmodels* command.
+*--board=boardname*: board that code should be compiled for. Possible 'boardname' choices include *uno* and *mega*. For boardname options, use the *boards* command.
 
 *--port=/some/port*: port of arduino to upload code or start serial communication. On Linux, dmesg is useful in determining this.
 
@@ -68,11 +70,15 @@ These settings are the same as those contained in *jno.jno* files. These setting
 ## Parameters (for other commands)
 Parameters are used only for the current invocation of the command and override local settings - they WILL NOT be saved. Possible settings are:
 
+*-p, --port=/some/port*: see --port above. Affects the upload, serial, and ports commands.
+
+*-b, --board=boardname*: see --board above. Affects the build, upload, and boards commands.
+
 *-b, --baudrate=9600*: see --baudrate above. Only affects serial command.
 
-*-p, --port=/some/port*: see --port above. Affects the upload and serial commands.
+*-e, --endline=some_string*: adds string on to end of any sent serial message. Only affects serial command.
 
-*--board=boardname*: see --board above. Affects the build, upload, and listmodels commands.
+*-q, --quit=some_string*: sets string that quits serial when entered ('EXIT' by default). Only affects serial command.
 
 # jno Directory Structure
 
