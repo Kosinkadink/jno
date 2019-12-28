@@ -71,7 +71,11 @@ def verify_arduino_dir(jno_dict):
 	exec_dir = jno_dict["exec_dir"]
 	if not os.path.isdir(exec_dir):
 		raise JnoException("specified exec_dir is not a valid directory: {}".format(exec_dir))
-	if not os.path.exists(os.path.join(exec_dir,"revisions.txt")):
+	if platform == "darwin": # running on OS X
+		revision_file = os.path.join(exec_dir,"Contents/Java/revisions.txt")
+	else:
+		revision_file = os.path.join(exec_dir,"revisions.txt")
+	if not os.path.exists(revision_file):
 		raise JnoException("specified exec_dir is not pointing at a valid arduino install: {}".format(exec_dir))
 
 # Create global settings in home directory if not created already
