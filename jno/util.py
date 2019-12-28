@@ -142,9 +142,11 @@ def run_arduino_process(arg_list):
 		call = subprocess.Popen(arg_list, stderr=subprocess.PIPE, universal_newlines=True)
 		for line in call.stderr:
 			if line.startswith("TRACE") or line.startswith("DEBUG") or line.startswith("INFO"):
-				pass
+				continue
+			elif line[25:29] == "INFO" or line[25:29] == "WARN":
+				continue
 			else:
-				sys.stdout.write(Fore.RED+line+Fore.RESET)
+				sys.stdout.write(line)
 		# wait until call is finished
 		call.communicate()[0]
 	except subprocess.CalledProcessError as e:
