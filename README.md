@@ -21,6 +21,10 @@ To begin using jno, change working directory to your project. Then, perform:
 
 This will initialize the basic directory structure and create a *jno.jno* file, which stores the local jno settings.
 
+Note that on Windows, calling jno like this may not work. Instead, call the jno module directly:
+
+	python -m jno
+
 By default, jno does not know where your Arduino IDE is located - this is represented by exec_dir in the config. There is a local and a global version of *jno.jno* files. The local *jno.jno* file overwrites the global version IF the parameters are not set to NULL or DEFAULT. To set up your exec_dir, find your Arduino folder - say /home/pi/Documents/arduino-1.8.10. Perform:
 
 	jno setglobal --exec_dir=/home/pi/Documents/arduino-1.8.10
@@ -53,6 +57,8 @@ The commands supported are:
 *jno setlocal [setting]*: change setting in local *jno.jno*
 
 *jno setglobal [setting]*: change setting in global *jno.jno*
+
+*jno help*: lists usage and description for each command
 
 ## Settings (for setlocal and setglobal)
 These settings are the same as those contained in *jno.jno* files. These settings WILL be saved locally or globally. Note that lower case inputs are equally as valid. Possible parameters are as follows:

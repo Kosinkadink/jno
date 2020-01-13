@@ -10,6 +10,10 @@ import getopt
 
 class Build(Command):
 
+	help_name = "Build"
+	help_usage = "jno build [-b, --board=] boardname [-v, --verbose]"
+	help_description = "Runs build. Without arguments, uses board defined locally/globally. With -v, more info will be displayed during build."
+
 	def run(self,argv,__location__):
 		jno_dict = interpret_configs()
 		verify_arduino_dir(jno_dict)

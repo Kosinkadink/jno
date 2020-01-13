@@ -11,6 +11,7 @@ from jno.commands.upload import Upload
 from jno.commands.boards import Boards
 from jno.commands.ports import Ports
 from jno.commands.clean import Clean
+from jno.commands.jnohelp import JnoHelp
 from jno.util import create_global_settings
 from jno.util import global_file_name
 from jno.util import get_home_directory
@@ -50,6 +51,9 @@ def ports_command(argv):
 def clean_command(argv):
 	Clean(argv,get_home_directory())
 
+def help_command(argv):
+	JnoHelp(argv,get_home_directory())
+
 
 # Dictionary linking option to function
 command_dict = {
@@ -61,7 +65,8 @@ command_dict = {
 	"setlocal": setlocal_command,
 	"boards": boards_command,
 	"ports": ports_command,
-	"clean": clean_command
+	"clean": clean_command,
+	"help": help_command
 }
 
 

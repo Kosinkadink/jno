@@ -14,11 +14,16 @@ from colorama import Fore, Back
 # class used for serial communication
 class JnoSerial(Command):
 
+	help_name = "Serial"
+	help_usage = "jno serial [-p, --port=] port [-b, --baudrate] baudrate [-q, --quit=] 'quit_string' [-e, --endline=] 'ending_chars'"
+	help_description = "Attempts to start serial communication with port. Without arguments, uses port/baudrate defined locally/globally. " \
+		"By default, the quit string is 'EXIT'; use -q to change. By default, there are no characters added onto sent data; use -e " \
+		"to specify ending characters to add. Any instances of '\\n' or '\\r' will be treated as newline or carriage return, respectively."
+
 	def run(self,argv,__location__):
 		jno_dict = interpret_configs()
 		jno_dict = self.parse_serial_args(argv,jno_dict)
 		self.start_serialcomm(jno_dict)
-
 
 	# Parse arguments passed into JnoSerial
 	def parse_serial_args(self,argv,jno_dict):
