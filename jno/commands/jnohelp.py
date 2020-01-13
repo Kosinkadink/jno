@@ -7,6 +7,7 @@ from jno.commands.upload import Upload
 from jno.commands.boards import Boards
 from jno.commands.ports import Ports
 from jno.commands.clean import Clean
+from jno.util import formatted_help_string, JnoException
 
 import os
 from colorama import Fore
@@ -16,21 +17,30 @@ command_list = [Init, Build, Upload, JnoSerial, Boards, Ports, Clean, SetDefault
 class JnoHelp(Command):
 
 	help_name = "Help"
-	help_usage = "jno help"
-	help_description = "Prints usage and description of all supported commands"
+	help_usage = "jno help [command_name]"
+	help_description = "Without arguments, prints usage and description for all supported commands. With a command name supplied, prints usage and description for specific command."
 
-	def run(self,argv,__location__):
+	def run(self,argv,location):
+		if len(argv) > 0:
+			query_name = argv[-1]
+			found_command = None
+			if query_name in ["setlocal", "setglobal"]:
+				found_command = SetDefault
+			else:
+				for command in command_list:
+					if command.help_name.lower() == query_name.lower():
+						found_command = command
+						break
+			if not found_command:
+				raise JnoException("help for command '{}' cannot be displayed'; command not found".format(query_name))
+			print(formatted_help_string(found_command))
+			return
+
 		print(Fore.CYAN+"======================"+Fore.YELLOW)
 		print("Help")
 		print(Fore.CYAN+"----------------------")
 		for command in command_list:
-			print(self.formatted_help_string(command))
-			if command != command_list[-1]:
-				print("")
+			print(formatted_help_string(command))
+			print("")
+		print(formatted_help_string(self))
 		print(Fore.CYAN+"======================"+Fore.RESET)
-
-	@staticmethod
-	def formatted_help_string(command):
-		return """{3}{0}{4}:
-    {5}Usage:{6} {1}
-    {5}Description:{6} {2}{7}""".format(command.help_name,command.help_usage,command.help_description,Fore.YELLOW,Fore.CYAN,Fore.MAGENTA,Fore.GREEN,Fore.RESET)

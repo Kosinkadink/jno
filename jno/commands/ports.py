@@ -14,7 +14,7 @@ class Ports(Command):
 	help_usage = "jno ports [-p, --port=] portname"
 	help_description = "Without arguments, prints list of all detected ports. With -p, prints details about specific port."
 
-	def run(self,argv,__location__):
+	def run(self,argv,location):
 		jno_dict = interpret_configs()
 		ports = get_all_ports()
 		self.perform_ports(argv,ports)

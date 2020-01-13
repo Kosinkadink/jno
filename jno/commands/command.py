@@ -1,4 +1,5 @@
 from jno.util import get_all_models
+from jno.util import formatted_help_string
 from jno.util import JnoException
 from colorama import Fore
 from sys import version_info
@@ -10,7 +11,10 @@ class Command():
 	help_usage = "None"
 	help_description = "None"
 
-	def __init__(self,argv,location):
+	def __init__(self,argv,location=None):
+		if argv and argv[-1] == "help":
+			print(formatted_help_string(self))
+			return
 		self.run(argv,location)
 
 

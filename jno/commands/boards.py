@@ -12,7 +12,7 @@ class Boards(Command):
 	help_usage = "jno boards [-b, --board=] boardname"
 	help_description = "Without arguments, prints list of all supported boards. With -b, prints details about specific board."
 
-	def run(self,argv,__location__):
+	def run(self,argv,location):
 		jno_dict = interpret_configs()
 		models = get_all_models(jno_dict)
 		self.perform_boards(argv,models)

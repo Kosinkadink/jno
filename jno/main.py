@@ -28,13 +28,13 @@ def init_command(argv):
 	Init(argv,os.getcwd())
 
 def build_command(argv):
-	Build(argv,get_home_directory())
+	Build(argv)
 
 def upload_command(argv):
-	Upload(argv,get_home_directory())
+	Upload(argv)
 
 def serial_command(argv):
-	JnoSerial(argv,get_home_directory())
+	JnoSerial(argv)
 
 def setglobal_command(argv):
 	SetDefault(argv,get_home_directory(),global_file_name)
@@ -43,16 +43,16 @@ def setlocal_command(argv):
 	SetDefault(argv,os.getcwd())
 
 def boards_command(argv):
-	Boards(argv,get_home_directory())
+	Boards(argv)
 
 def ports_command(argv):
-	Ports(argv,get_home_directory())
+	Ports(argv)
 
 def clean_command(argv):
-	Clean(argv,get_home_directory())
+	Clean(argv)
 
 def help_command(argv):
-	JnoHelp(argv,get_home_directory())
+	JnoHelp(argv)
 
 
 # Dictionary linking option to function

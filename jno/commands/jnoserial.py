@@ -20,7 +20,7 @@ class JnoSerial(Command):
 		"By default, the quit string is 'EXIT'; use -q to change. By default, there are no characters added onto sent data; use -e " \
 		"to specify ending characters to add. Any instances of '\\n' or '\\r' will be treated as newline or carriage return, respectively."
 
-	def run(self,argv,__location__):
+	def run(self,argv,location):
 		jno_dict = interpret_configs()
 		jno_dict = self.parse_serial_args(argv,jno_dict)
 		self.start_serialcomm(jno_dict)

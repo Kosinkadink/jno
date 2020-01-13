@@ -17,7 +17,7 @@ class Upload(Command):
 	help_description = "Runs build and uploads to board. Without arguments, uses board/port defined locally/globally. " \
 		"If port is not defined, uses first available port. With -v, more info will be displayed during upload."
 
-	def run(self,argv,__location__):
+	def run(self,argv,location):
 		jno_dict = interpret_configs()
 		verify_arduino_dir(jno_dict)
 		create_build_directory(jno_dict)

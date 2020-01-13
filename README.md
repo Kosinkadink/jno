@@ -58,7 +58,7 @@ The commands supported are:
 
 *jno setglobal [setting]*: change setting in global *jno.jno*
 
-*jno help*: lists usage and description for each command
+*jno help [command name]*: lists usage and description for all commands, or for a specific command
 
 ## Settings (for setlocal and setglobal)
 These settings are the same as those contained in *jno.jno* files. These settings WILL be saved locally or globally. Note that lower case inputs are equally as valid. Possible parameters are as follows:
@@ -85,6 +85,8 @@ Parameters are used only for the current invocation of the command and override 
 *-e, --endline=some_string*: adds string on to end of any sent serial message. Only affects serial command.
 
 *-q, --quit=some_string*: sets string that quits serial when entered ('EXIT' by default). Only affects serial command.
+
+Note: invoking any command with "help" following the command name will print the help string for the command instead, as if *jno help [command name]* was invoked.
 
 # jno Directory Structure
 
