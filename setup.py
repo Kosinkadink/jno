@@ -15,7 +15,6 @@ setup(
 	long_description=readme_contents,
 	long_description_content_type="text/markdown",
 	url = "https://github.com/kosinkadink/jno",
-	download_url = "https://github.com/kosinkadink/jno/archive/{}.tar.gz".format(jno_version),
 	author="Jedrzej Kosinski",
 	author_email="kosinkadink1@gmail.com",
 	license="MIT",
@@ -23,7 +22,7 @@ setup(
 	packages=["jno"],
 	include_package_data=True,
 	install_requires=install_requirements,
-	entry_ports = {
+	entry_points = {
 		"console_scripts": [
 			"jno=jno.__main__:main",
 		]
