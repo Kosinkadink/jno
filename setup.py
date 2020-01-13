@@ -19,14 +19,14 @@ setup(
 	author_email="kosinkadink1@gmail.com",
 	license="MIT",
 	keywords="arduino interface ide wrapper",
-	packages=["jno"],
+	packages=["jno","jno.commands"],
 	include_package_data=True,
 	install_requires=install_requirements,
 	entry_points = {
 		"console_scripts": [
 			"jno=jno.__main__:main",
 		]
-	}
+	},
 	classifiers=[
 		"Development Status :: 4 - Beta",
 		"License :: OSI Approved :: MIT License",
