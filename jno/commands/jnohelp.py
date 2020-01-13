@@ -33,14 +33,12 @@ class JnoHelp(Command):
 						break
 			if not found_command:
 				raise JnoException("help for command '{}' cannot be displayed'; command not found".format(query_name))
-			print(formatted_help_string(found_command))
+			print(formatted_help_string(found_command,surround=True))
 			return
 
-		print(Fore.CYAN+"======================"+Fore.YELLOW)
-		print("Help")
-		print(Fore.CYAN+"----------------------")
+		print(Fore.CYAN+"======================")
 		for command in command_list:
 			print(formatted_help_string(command))
-			print("")
+			print(Fore.CYAN+"----------------------")
 		print(formatted_help_string(self))
 		print(Fore.CYAN+"======================"+Fore.RESET)

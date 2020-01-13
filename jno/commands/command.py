@@ -13,7 +13,7 @@ class Command():
 
 	def __init__(self,argv,location=None):
 		if argv and argv[-1] == "help":
-			print(formatted_help_string(self))
+			print(formatted_help_string(self,surround=True))
 			return
 		self.run(argv,location)
 

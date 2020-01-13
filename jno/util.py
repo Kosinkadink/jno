@@ -317,10 +317,14 @@ def get_boards_from_directory(fileloc,prefix):
 	return models
 
 # Get help string for command
-def formatted_help_string(command):
-		return """{3}{0}{4}:
-    {5}Usage:{6} {1}
-    {5}Description:{6} {2}{7}""".format(command.help_name,command.help_usage,command.help_description,Fore.YELLOW,Fore.CYAN,Fore.MAGENTA,Fore.GREEN,Fore.RESET)
+def formatted_help_string(command, surround=False):
+		return """{8}{3}{0}:
+    {4}Usage:{6} {1}
+    {4}Description:{5} {2}{9}{7}""".format(
+    	command.help_name,command.help_usage,command.help_description,
+    	Fore.YELLOW,Fore.CYAN,Fore.MAGENTA,Fore.GREEN,Fore.RESET,
+    	Fore.CYAN+"======================\n" if surround else "",
+    	Fore.CYAN+"\n======================" if surround else "")
 
 # A named tuple used to represent a specific menu item
 MenuItem = namedtuple("MenuItem", ["name","label"])
