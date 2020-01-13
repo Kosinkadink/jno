@@ -5,6 +5,10 @@ import os
 
 class Init(Command):
 
+	help_name = "Init"
+	help_usage = "jno init"
+	help_description = "Initializes current directory for jno purposes; adds sketch dir and empty .ino file, adds libraries dir, and adds default jno.jno file."
+
 	def run(self,argv,location):
 		self.init_jno(location)
 

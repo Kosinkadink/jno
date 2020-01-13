@@ -9,6 +9,10 @@ from sys import version_info
 
 class SetDefault(Command):
 
+	help_name = "SetDefault"
+	help_usage = "jno setlocal|setglobal [--exec_dir=] arduino_dir [--baudrate=] baudrate [--port=] port [--board=] boardname"
+	help_description = "Sets local or global default values for various parameters. At least one argument must be provided. Exec_dir refers to the Arduino directory (most OS) or app (MacOS only)."
+
 	def __init__(self,argv,location,file_name="jno.jno"):
 		self.run(argv,location,file_name)
 

@@ -7,6 +7,10 @@ from colorama import Fore
 
 class Clean(Command):
 
+	help_name = "Clean"
+	help_usage = "jno clean"
+	help_description = "Cleans cached .build directory, contained inside sketch_dir for current directory."
+
 	def run(self,argv,__location__):
 		jno_dict = interpret_configs()
 		if clean_directory(os.path.join(jno_dict["sketch_dir"],".build")):

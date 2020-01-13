@@ -12,6 +12,11 @@ from colorama import Fore
 
 class Upload(Command):
 
+	help_name = "Upload"
+	help_usage = "jno upload [-b, --board=] boardname [-p, --ports=] port [-v, --verbose]"
+	help_description = "Runs build and uploads to board. Without arguments, uses board/port defined locally/globally. " \
+		"If port is not defined, uses first available port. With -v, more info will be displayed during upload."
+
 	def run(self,argv,__location__):
 		jno_dict = interpret_configs()
 		verify_arduino_dir(jno_dict)

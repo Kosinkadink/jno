@@ -6,6 +6,10 @@ from sys import version_info
 
 class Command():
 
+	help_name = "Command"
+	help_usage = "None"
+	help_description = "None"
+
 	def __init__(self,argv,location):
 		self.run(argv,location)
 
