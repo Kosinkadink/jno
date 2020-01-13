@@ -21,7 +21,7 @@ To begin using jno, change working directory to your project. Then, perform:
 
 This will initialize the basic directory structure and create a *jno.jno* file, which stores the local jno settings.
 
-Note that on Windows, calling jno like this may not work. Instead of "jno" as the prefix, use:
+Note that on Windows, calling jno like this may not work. Instead, call the jno module directly:
 
 	python -m jno
 
