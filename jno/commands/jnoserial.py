@@ -15,10 +15,12 @@ from colorama import Fore, Back
 class JnoSerial(Command):
 
 	help_name = "Serial"
-	help_usage = "jno serial [-p, --port=] port [-b, --baudrate] baudrate [-q, --quit=] 'quit_string' [-e, --endline=] 'ending_chars'"
+	help_usage = "jno serial [-p, --port=] port [-b, --baudrate] baudrate [-q, --quit=] 'quit_string' [-e, --endline=] 'ending_chars' [-n, --noreplace]"
 	help_description = "Attempts to start serial communication with port. Without arguments, uses port/baudrate defined locally/globally. " \
 		"By default, the quit string is 'EXIT'; use -q to change. By default, there are no characters added onto sent data; use -e " \
-		"to specify ending characters to add. Any instances of '\\n' or '\\r' will be treated as newline or carriage return, respectively."
+		"to specify ending characters to add. For the ending chars, any instances of '\\n' or '\\r' will be treated as newline or carriage return, respectively. " \
+		"By default, any instances of '\\n' or '\\r' sent via user input to device will be treated as special characters, but using -n will deactivate " \
+		"that functionality."
 
 	def run(self,argv,location):
 		jno_dict = interpret_configs()
@@ -28,9 +30,10 @@ class JnoSerial(Command):
 	# Parse arguments passed into JnoSerial
 	def parse_serial_args(self,argv,jno_dict):
 		try:
-			opts,args = getopt.getopt(argv, "p:b:q:e:",["port=","baudrate=","quit=","endline="])
+			opts,args = getopt.getopt(argv, "p:b:q:e:n",["port=","baudrate=","quit=","endline=","noreplace"])
 		except getopt.GetoptError as e:
 			raise JnoException(str(e))
+		jno_dict["REPLACE"] = True
 		for opt, arg in opts:
 			if opt in ("-p","--port"):
 				if arg.strip() == "":
@@ -48,6 +51,8 @@ class JnoSerial(Command):
 				if arg.strip() == "":
 					raise ValueError("no endline string provided")
 				jno_dict["ENDLINE"] = arg
+			elif opt in ("-n","--noreplace"):
+				jno_dict["REPLACE"] = False
 		return jno_dict
 
 
@@ -113,7 +118,14 @@ class JnoSerial(Command):
 			if user_inp.strip() == jno_dict["QUIT"]:
 				break
 			else:
-				ard_serial.write(user_inp.strip().encode()+jno_dict["ENDLINE"].encode())
+				user_inp = user_inp.strip()
+				if jno_dict["REPLACE"]:
+					# replace typed in \r and \n with carriage return or newline, respectively
+					if "\\r" in user_inp:
+						user_inp = user_inp.replace("\\r","\r")
+					if "\\n" in user_inp:
+						user_inp = user_inp.replace("\\n","\n")
+				ard_serial.write(user_inp.encode()+jno_dict["ENDLINE"].encode())
 		ser_event.set()
 		ser_thread.join(timeout=2)
 
@@ -124,20 +136,7 @@ class JnoSerial(Command):
 		sys.stdout.flush()
 		while not ser_event.is_set():
 			recvd = ard_serial.read()
-			#if not recvd:
-			#	continue
 			sys.stdout.write(Fore.MAGENTA+recvd.decode()+Fore.RESET)
 			if not ser_message_sent.is_set() and recvd:
 				print("")
 				ser_message_sent.set()
-
-
-	# Return first working serial connection
-	def get_first_serial(self,baud):
-		for num in range(0,5):
-			pass
-
-
-	# Try to start serial comm with device
-	def get_serial_comm(self,port,baud):
-		pass

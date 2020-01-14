@@ -5,12 +5,8 @@ Command line interface wrapper for Arduino IDE, inspired by ino.
 Using PyPi, the package can be obtained using:
 	
 	pip install jno
-
-If you prefer running the setup.py, then download repo, change working directory and do:
-
-	make install
 	
-Or you can use:
+Or you can download the repo and use:
 
 	pip install .
 
@@ -85,6 +81,8 @@ Parameters are used only for the current invocation of the command and override 
 *-e, --endline=some_string*: adds string on to end of any sent serial message. Only affects serial command.
 
 *-q, --quit=some_string*: sets string that quits serial when entered ('EXIT' by default). Only affects serial command.
+
+*-n, --noreplace*: turns off replacement of \n or \r in user-sent data with newline or carriage return. Only affects serial command.
 
 Note: invoking any command with "help" following the command name will print the help string for the command instead, as if *jno help [command name]* was invoked.
 
